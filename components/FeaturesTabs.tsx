@@ -184,7 +184,7 @@ const FeaturesTabs: React.FC = () => {
                     <h3 className="mx-auto md:w-4/5 lg:w-3/5 xl:w-[75%] text-gray-600">Explora las herramientas principales de VANLANDINGS, diseñadas para convertir visitantes en clientes.</h3>
                 </div>
 
-                <div ref={highlightRef} className="my-8 text-center">
+                <div ref={highlightRef} className="my-4 lg:my-8 text-center">
                     <h3 className="text-xl md:text-2xl font-semibold text-cleat-dark">
                         Nuestra IA <span className="highlight-word highlight-crea" style={{ transitionDelay: '200ms' }}>crea</span>, <span className="highlight-word highlight-optimiza" style={{ transitionDelay: '400ms' }}>optimiza</span> y <span className="highlight-word highlight-acelera" style={{ transitionDelay: '600ms' }}>acelera</span> tu camino al éxito.
                     </h3>
@@ -249,7 +249,7 @@ const FeaturesTabs: React.FC = () => {
                                     role="tabpanel"
                                     data-state={activeTab === index ? 'active' : 'inactive'}
                                     className={`
-                                        absolute inset-0 w-full transition-opacity duration-500 data-[state=inactive]:opacity-0 data-[state=inactive]:pointer-events-none data-[state=active]:opacity-100
+                                        absolute inset-0 w-full transition-opacity duration-500 data-[state=inactive]:opacity-0 data-[state=inactive]:pointer-events-none data-[state=active]:opacity-100 max-md:px-6
                                         ${
                                             isVerticalLayout
                                             ? 'flex flex-col-reverse md:flex-row md:items-start' // Layout for Vertical (always two columns side-by-side)

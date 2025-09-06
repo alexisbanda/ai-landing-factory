@@ -30,6 +30,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
+  const [isMobileFeaturesOpen, setIsMobileFeaturesOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({ opacity: 0 });
@@ -377,7 +378,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenDemoModal, onOpenSignUpModal }) =
           
           {/* Mobile Menu Toggle */}
           <div className="lg:hidden flex items-center gap-2">
-             <button onClick={onOpenSignUpModal} className="bg-cleat-dark text-white px-4 py-2 rounded-full text-xs font-semibold hover:bg-opacity-90">EMPIEZA GRATIS</button>
+             <button onClick={onOpenSignUpModal} className="bg-cleat-dark text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-opacity-90">EMPEZAR</button>
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Toggle menu">
               {isMenuOpen ? <XIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
             </button>
@@ -388,7 +389,22 @@ const Header: React.FC<HeaderProps> = ({ onOpenDemoModal, onOpenSignUpModal }) =
       {/* Mobile Nav */}
       <div className={`lg:hidden bg-white shadow-lg absolute top-full left-0 w-full p-6 transition-all duration-300 ease-in-out transform ${isMenuOpen ? 'translate-y-0 opacity-100 visible' : '-translate-y-4 opacity-0 invisible'}`}>
           <nav className="flex flex-col gap-4">
-              <a href="#features" className="px-3 py-2 text-gray-700 hover:text-primary">Características</a>
+              <div className="flex flex-col">
+                <button onClick={() => setIsMobileFeaturesOpen(!isMobileFeaturesOpen)} className="flex justify-between items-center px-3 py-2 text-gray-700 hover:text-primary">
+                    <span className={`transition-colors group-hover:text-primary ${isMobileFeaturesOpen ? 'text-primary font-semibold' : 'font-medium'}`}>Características</span>
+                    <ChevronDownIcon className={`h-4 w-4 transition-transform ${isMobileFeaturesOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {isMobileFeaturesOpen && (
+                    <div className="pl-4 pt-2 flex flex-col gap-2">
+                        {features.map((feature) => (
+                            <a key={feature.title} href="#" className="flex items-center gap-3 p-2 rounded-md hover:bg-slate-50">
+                                {feature.icon}
+                                <span className="text-sm font-medium text-cleat-dark">{feature.title}</span>
+                            </a>
+                        ))}
+                    </div>
+                )}
+              </div>
               <a href="#how-it-works" className="px-3 py-2 text-gray-700 hover:text-primary">Cómo Funciona</a>
               <a href="#showcase" className="px-3 py-2 text-gray-700 hover:text-primary">Galería</a>
               <a href="#testimonials" className="px-3 py-2 text-gray-700 hover:text-primary">Testimonios</a>
@@ -408,6 +424,12 @@ const Header: React.FC<HeaderProps> = ({ onOpenDemoModal, onOpenSignUpModal }) =
                             Iniciar Sesión <UserIcon className="h-4 w-4" />
                         </a>
                     )}
+                </div>
+              )}
+
+              {i18nConfig.enabled && (
+                <div className="mt-4 pt-4 border-t border-slate-200 flex justify-center">
+                  <LanguageSwitcher />
                 </div>
               )}
           </nav>
