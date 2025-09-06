@@ -1,0 +1,5 @@
+{
+  "name": "AI Landing Page Factory",
+  "description": "A responsive landing page for an AI-powered platform that creates fast, low-cost landing pages with advanced automation and AI features. The application also includes a dynamic FAQ section powered by the Gemini API.",
+  "requestFramePermissions": []
+}

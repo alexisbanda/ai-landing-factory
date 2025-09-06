@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VANLANDINGS | AI Landing Page Factory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              // =================================================================
+              // PALETTE SWITCHER: UNCOMMENT THE PALETTE YOU WANT TO USE
+              // =================================================================
+
+              // PALETTE 1: "Pacific Tech" (Cool, Professional Blue/Cyan Theme) - CURRENTLY ACTIVE
+              
+              // 1. Primary Brand Colors
+              primary: '#0284C7',       // Sky 600
+              'cleat-dark': '#1E293B',  // Slate 800
+
+              // 2. Role-Based Theme Colors
+              theme: {
+                accent: {
+                  primary: '#22D3EE',     // Cyan 400
+                  secondary: '#2DD4BF',    // Teal 400
+                },
+                cta: {
+                  'gradient-start': '#0284C7', // Sky 600
+                  'gradient-end': '#0369A1',   // Sky 700
+                }
+              },
+
+              // 3. Categorical/UI Colors
+              categorical: {
+                'blue-light': '#F0F9FF',      'blue-mid': '#0EA5E9',    // Sky
+                'green-light': '#F0FDFA',     'green-mid': '#14B8A6',    // Teal
+                'violet-light': '#F5F3FF',    'violet-mid': '#8B5CF6',   // Violet
+                'orange-light': '#ECFDF5',    'orange-mid': '#10B981',   // Emerald
+                'cyan-light': '#F1F5F9',      'cyan-mid': '#64748B',     // Slate
+              },
+              
+              // 4. Neutral Colors
+              neutral: {
+                '50': '#F8FAFC',    // slate-50
+                '100': '#F1F5F9',   // slate-100
+                '200': '#E2E8F0',   // slate-200
+                '400': '#94A3B8',   // slate-400
+                '600': '#475569',   // slate-600
+                '700': '#334155',   // slate-700
+                '800': '#1E293B',   // slate-800
+              },
+
+              // 5. Semantic Colors
+              status: {
+                success: '#10B981', // Emerald 500
+                error: '#DC2626',   // Red 600
+              }
+              
+              // ================= END OF PACIFIC TECH PALETTE =================
+
+              // PALETTE 2: "Golden Hour" (Warm, Vibrant, Sunset Theme)
+              /*
+              // 1. Primary Brand Colors
+              primary: '#D97706',       // Amber 600: A warm, inviting orange.
+              'cleat-dark': '#44403C',  // Stone 700: Rich, warm dark brown/gray.
+
+              // 2. Role-Based Theme Colors
+              theme: {
+                accent: {
+                  primary: '#FBBF24',     // Amber 400: Bright, sunny yellow.
+                  secondary: '#FB7185',    // Rose 400: Vibrant, warm pink.
+                },
+                cta: {
+                  'gradient-start': '#F97316', // Orange 500: Energetic start for the final CTA.
+                  'gradient-end': '#EA580C',   // Orange 600: Deeper, richer orange for CTA end.
+                }
+              },
+
+              // 3. Categorical/UI Colors (Mapped to warm tones)
+              categorical: {
+                'blue-light': '#FFFBEB',   'blue-mid': '#F59E0B',    // Amber
+                'green-light': '#FEF2F2',  'green-mid': '#F87171',    // Red
+                'violet-light': '#FFF7ED', 'violet-mid': '#FB923C',   // Orange
+                'orange-light': '#FDF4FF', 'orange-mid': '#E879F9',   // Fuchsia
+                'cyan-light': '#F7FEE7',   'cyan-mid': '#84CC16',     // Lime
+              },
+              
+              // 4. Neutral Colors (Warmer "Stone" palette)
+              neutral: {
+                '50': '#FAFAF9',    // stone-50
+                '100': '#F5F5F4',   // stone-100
+                '200': '#E7E5E4',   // stone-200
+                '400': '#A8A29E',   // stone-400
+                '600': '#57534E',   // stone-600
+                '700': '#44403C',   // stone-700
+                '800': '#292524',   // stone-800
+              },
+
+              // 5. Semantic Colors
+              status: {
+                success: '#16A34A', // Green 600
+                error: '#DC2626',   // Red 600
+              }
+              */
+              // ================= END OF GOLDEN HOUR PALETTE =================
+            },
+            boxShadow: {
+              'solid-8': '8px 8px 0px #E2E8F0', // Updated to match Pacific Tech neutral color
+              'contextual-cta': '0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+            }
+          },
+        },
+      }
+    </script>
+    <script>
+      (function() {
+        // This script runs immediately after the config is defined.
+        // It creates CSS variables from the Tailwind config to be used in SVGs.
+        const colors = tailwind.config.theme.extend.colors;
+        const root = document.documentElement;
+        if (colors) {
+            root.style.setProperty('--color-primary', colors.primary);
+            root.style.setProperty('--color-cleat-dark', colors['cleat-dark']);
+            root.style.setProperty('--color-accent-primary', colors.theme.accent.primary);
+            root.style.setProperty('--color-accent-secondary', colors.theme.accent.secondary);
+        }
+      })();
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.15.0",
+    "react-dom/": "https://esm.sh/react-dom@^18.3.1/",
+    "react/": "https://esm.sh/react@^18.3.1/",
+    "react": "https://esm.sh/react@^18.3.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
