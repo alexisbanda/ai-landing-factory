@@ -48,7 +48,7 @@ const Hero: React.FC<HeroProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
         { name: 'Node.js', light: 'https://cdn.simpleicons.org/nodedotjs/339933', dark: 'https://cdn.simpleicons.org/nodedotjs/FFFFFF' },
         { name: 'TypeScript', light: 'https://cdn.simpleicons.org/typescript/3178C6', dark: 'https://cdn.simpleicons.org/typescript/FFFFFF' },
         { name: 'Vercel', light: 'https://cdn.simpleicons.org/vercel/000000', dark: 'https://cdn.simpleicons.org/vercel/FFFFFF' },
-        { name: 'Amazon AWS', light: 'https://cdn.simpleicons.org/amazonaws/232F3E', dark: 'https://cdn.simpleicons.org/amazonaws/FFFFFF' },
+        { name: 'Amazon AWS', light: 'https://cdn.simpleicons.org/aws/232F3E', dark: 'https://cdn.simpleicons.org/aws/FFFFFF' },
     ];
 
     const keyFeatures = [
