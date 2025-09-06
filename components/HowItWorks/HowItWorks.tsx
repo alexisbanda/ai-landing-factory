@@ -278,40 +278,48 @@ const HowItWorks: React.FC = () => {
               </div>
           </div>
 
-          <div className="flex flex-col items-center justify-between xl:h-[540px] xl:flex-row xl:gap-0">
-             {steps.map((step, index) => (
-              <React.Fragment key={step.title}>
-                {index === activeIndex ? (
-                  <div key={activeIndex}>
-                    <ActiveStep 
-                      step={step} 
-                      index={index} 
-                      onNavigate={handleNavigation}
-                      onMouseEnter={handleMouseEnter}
-                      onMouseLeave={handleMouseLeave}
-                      isPaused={isPaused}
-                      togglePause={togglePause}
-                      onTouchStart={handleTouchStart}
-                      onTouchEnd={handleTouchEnd}
-                    />
-                  </div>
-                ) : (
-                  <InactiveStep step={step} index={index} onClick={() => selectStep(index)} />
-                )}
-                
-                {index < steps.length - 1 && (
-                  <div
-                    className="
-                      /* Mobile: vertical line */
-                      w-0.5 min-h-8 bg-slate-200
+          {/* Mobile Carousel View */}
+          <div className="flex flex-col items-center justify-center xl:hidden">
+              <ActiveStep 
+                  step={steps[activeIndex]} 
+                  index={activeIndex} 
+                  onNavigate={handleNavigation}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                  isPaused={isPaused}
+                  togglePause={togglePause}
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={handleTouchEnd}
+              />
+          </div>
+  
+          {/* Desktop Steps View */}
+          <div className="hidden xl:flex flex-row items-center justify-between h-[540px] w-full">
+              {steps.map((step, index) => (
+                  <React.Fragment key={step.title}>
+                      {index === activeIndex ? (
+                          <div key={activeIndex}>
+                              <ActiveStep 
+                                  step={step} 
+                                  index={index} 
+                                  onNavigate={handleNavigation}
+                                  onMouseEnter={handleMouseEnter}
+                                  onMouseLeave={handleMouseLeave}
+                                  isPaused={isPaused}
+                                  togglePause={togglePause}
+                                  onTouchStart={handleTouchStart}
+                                  onTouchEnd={handleTouchEnd}
+                              />
+                          </div>
+                      ) : (
+                          <InactiveStep step={step} index={index} onClick={() => selectStep(index)} />
+                      )}
                       
-                      /* Desktop: horizontal line */
-                      xl:w-auto xl:flex-1 xl:h-0.5 xl:min-h-0
-                    "
-                  />
-                )}
-              </React.Fragment>
-            ))}
+                      {index < steps.length - 1 && (
+                          <div className="w-auto flex-1 h-0.5 bg-slate-200" />
+                      )}
+                  </React.Fragment>
+              ))}
           </div>
       </div>
     </section>

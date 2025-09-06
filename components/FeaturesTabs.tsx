@@ -1,19 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Feature } from '../types';
-import { FileSearchIcon, ArrowLeftRightIcon, SparklesIcon, TargetIcon, FileTextIcon, HeartHandshakeIcon, ArrowRightIcon, CheckIcon } from './icons/Icons';
-import Modal from './Modal';
+import { FileSearchIcon, ArrowLeftRightIcon, SparklesIcon, TargetIcon, FileTextIcon, HeartHandshakeIcon, ArrowRightIcon, CheckIcon, ArrowLeftIcon } from './icons/Icons';
 
-// =================================================================
-// CONFIGURATION
-// =================================================================
-const featuresTabsConfig = {
-  // 'contained': The image sits within the padded content area.
-  // 'full-bleed': The image breaks out of the container and goes to the edge.
-  layoutStyle: 'full-bleed' as 'contained' | 'full-bleed',
-  // 'horizontal': Tabs are above the content.
-  // 'vertical': Tabs are on the left of the content (on lg screens and up).
-  tabOrientation: 'vertical' as 'horizontal' | 'vertical',
-};
 // =================================================================
 
 // Fix: Omitted 'details' from the Feature type to resolve the type conflict.
@@ -26,6 +14,54 @@ interface TabFeature extends Omit<Feature, 'description' | 'details'> {
     details: string[];
     image: string;
 }
+
+// =================================================================
+// MODAL COMPONENT
+// =================================================================
+interface ModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    title: string;
+    children: React.ReactNode;
+}
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
+    if (!isOpen) return null;
+
+    return (
+        <div 
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+            onClick={onClose}
+        >
+            <div 
+                className="relative w-full max-w-lg p-8 bg-white rounded-lg shadow-xl m-4"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="flex items-center justify-between pb-4 border-b">
+                    <h3 className="text-xl font-semibold text-slate-800">{title}</h3>
+                    <button onClick={onClose} className="p-1 rounded-full hover:bg-slate-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div className="mt-4">
+                    {children}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
+// =================================================================
+// CONFIGURATION
+// =================================================================
+const featuresTabsConfig = {
+  layoutStyle: 'full-bleed' as 'contained' | 'full-bleed',
+  tabOrientation: 'vertical' as 'horizontal' | 'vertical',
+};
+// =================================================================
+
 
 const featuresData: TabFeature[] = [
     { 
@@ -108,6 +144,13 @@ const FeaturesTabs: React.FC = () => {
 
     const isFullBleed = featuresTabsConfig.layoutStyle === 'full-bleed';
     const isVerticalLayout = featuresTabsConfig.tabOrientation === 'vertical';
+
+    const handlePrev = () => {
+        setActiveTab((prev) => (prev - 1 + featuresData.length) % featuresData.length);
+    };
+    const handleNext = () => {
+        setActiveTab((prev) => (prev + 1) % featuresData.length);
+    };
 
     useEffect(() => {
         const element = highlightRef.current;
@@ -197,11 +240,28 @@ const FeaturesTabs: React.FC = () => {
                         ? (isFullBleed ? 'lg:grid lg:grid-cols-12 lg:gap-2 lg:items-start' : 'lg:grid lg:grid-cols-[280px_1fr] lg:gap-12 lg:items-start') 
                         : 'flex flex-col items-center'
                     }`}>
-                        {/* Tabs Container */}
-                        <div role="tablist" className={`relative ${
+                        
+                        {/* Mobile Carousel Navigation */}
+                        <div className="lg:hidden mb-6 w-full">
+                            <div className="flex items-center justify-between max-w-xs mx-auto">
+                                <button onClick={handlePrev} aria-label="Anterior" className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors">
+                                    <ArrowLeftIcon className="h-5 w-5" />
+                                </button>
+                                <div className="text-center">
+                                    <p className="font-semibold text-lg text-cleat-dark">{activeFeature.title}</p>
+                                    <p className="text-sm text-slate-500">{activeTab + 1} / {featuresData.length}</p>
+                                </div>
+                                <button onClick={handleNext} aria-label="Siguiente" className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors">
+                                    <ArrowRightIcon className="h-5 w-5" />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Desktop Tabs Container */}
+                        <div role="tablist" className={`hidden relative ${
                             isVerticalLayout 
-                            ? (isFullBleed ? 'lg:col-span-3 lg:col-start-2' : 'w-full') + ' mb-6 lg:mb-0 flex flex-col w-full max-w-sm mx-auto lg:w-full lg:max-w-none lg:space-y-1.5' 
-                            : 'inline-flex items-center justify-start text-muted-foreground h-auto w-auto max-w-[95%] space-x-1.5 overflow-x-auto rounded-lg bg-slate-100 p-1.5'
+                            ? (isFullBleed ? 'lg:col-span-3 lg:col-start-2' : 'w-full') + ' lg:flex flex-col w-full max-w-sm mx-auto lg:w-full lg:max-w-none lg:space-y-1.5' 
+                            : 'lg:inline-flex items-center justify-start text-muted-foreground h-auto w-auto max-w-[95%] space-x-1.5 overflow-x-auto rounded-lg bg-slate-100 p-1.5'
                         }`}>
                             <div
                                 className={`absolute transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${
@@ -238,7 +298,7 @@ const FeaturesTabs: React.FC = () => {
                             className={`
                                 relative w-full transition-[height] duration-500 ease-in-out overflow-hidden
                                 ${isVerticalLayout && isFullBleed ? 'lg:col-span-8' : ''}
-                                ${!isVerticalLayout ? 'mt-8 md:mt-16' : ''}
+                                ${!isVerticalLayout ? 'lg:mt-8 lg:md:mt-16' : ''}
                             `}
                             style={{ height: containerHeight ? `${containerHeight}px` : undefined }}
                         >
@@ -325,10 +385,10 @@ const FeaturesTabs: React.FC = () => {
                                             </div>
                                         </div>
                                         <div className={`
-                                            block w-full overflow-hidden
+                                            block w-full overflow-hidden aspect-video md:aspect-auto
                                             ${isFullBleed && isVerticalLayout
-                                                ? 'h-full' // Vertical full bleed takes full height
-                                                : (isFullBleed ? 'md:h-full' : 'relative aspect-video md:h-full')
+                                                ? 'md:h-full'
+                                                : (isFullBleed ? 'md:h-full' : 'relative md:h-full')
                                             }
                                         `}>
                                             <div className={`relative h-full data-[state=active]:md:animate-slide-in bg-slate-200 ${imageRoundingClass}`}>
@@ -429,3 +489,4 @@ const FeaturesTabs: React.FC = () => {
 };
 
 export default FeaturesTabs;
+

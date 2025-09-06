@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { CheckIcon } from './icons/Icons';
 
 // Configuration for plans
@@ -59,6 +59,8 @@ interface PricingProps {
 }
 
 const Pricing: React.FC<PricingProps> = ({ onOpenSignUpModal }) => {
+  const [activeIndex, setActiveIndex] = useState(1); // Start with the popular plan (index 1)
+
   return (
     <section id="pricing" className="py-16 md:py-20 bg-white">
       <div className="container mx-auto max-w-6xl px-4">
@@ -71,7 +73,68 @@ const Pricing: React.FC<PricingProps> = ({ onOpenSignUpModal }) => {
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
+        {/* Mobile Carousel */}
+        <div className="md:hidden">
+          <div
+            className={`relative rounded-xl border p-8 flex flex-col h-full transition-all duration-300 ${
+              pricingPlans[activeIndex].isPopular
+                ? 'border-primary shadow-2xl bg-primary/5'
+                : 'border-slate-200 bg-white shadow-lg'
+            }`}
+          >
+            {pricingPlans[activeIndex].isPopular && (
+              <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2">
+                <span className="rounded-full bg-primary px-4 py-1 text-sm font-semibold text-white">
+                  MÁS POPULAR
+                </span>
+              </div>
+            )}
+            <div className="flex-grow">
+              <h3 className="text-2xl font-bold text-cleat-dark text-center">{pricingPlans[activeIndex].name}</h3>
+              <div className="mt-4 text-center">
+                <span className="text-4xl font-extrabold text-cleat-dark">{pricingPlans[activeIndex].price}</span>
+                <span className="text-lg font-medium text-gray-500">{pricingPlans[activeIndex].billingCycle}</span>
+              </div>
+              <p className="mt-4 text-center text-gray-600 h-16">{pricingPlans[activeIndex].description}</p>
+              
+              <ul className="mt-8 space-y-4">
+                {pricingPlans[activeIndex].features.map((feature, index) => (
+                  <li key={index} className="flex items-center gap-3">
+                    <CheckIcon className="h-5 w-5 flex-shrink-0 text-status-success" />
+                    <span className="text-slate-700">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mt-10">
+              <button
+                onClick={onOpenSignUpModal}
+                className={`w-full text-center inline-block rounded-full px-6 py-3 font-semibold transition-all duration-300 ${
+                  pricingPlans[activeIndex].isPopular
+                    ? 'bg-primary text-white shadow-md hover:bg-opacity-90'
+                    : 'bg-white border-2 border-cleat-dark text-cleat-dark hover:bg-cleat-dark hover:text-white'
+                }`}
+              >
+                {pricingPlans[activeIndex].ctaText}
+              </button>
+            </div>
+          </div>
+          {/* Dots */}
+          <div className="flex justify-center gap-3 mt-8">
+              {pricingPlans.map((_, index) => (
+                  <button
+                      key={index}
+                      onClick={() => setActiveIndex(index)}
+                      aria-label={`Ver plan ${pricingPlans[index].name}`}
+                      className={`h-3 w-3 rounded-full transition-all duration-300 ${activeIndex === index ? 'bg-primary' : 'bg-slate-300'}`}
+                  />
+              ))}
+          </div>
+        </div>
+
+        {/* Desktop Grid */}
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
           {pricingPlans.map((plan) => (
             <div
               key={plan.name}

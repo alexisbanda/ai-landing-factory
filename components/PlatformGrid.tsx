@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Feature } from '../types';
-import { FileSearchIcon, ArrowLeftRightIcon, SparklesIcon, TargetIcon, FileTextIcon, HeartHandshakeIcon, ArrowRightIcon, CheckIcon } from './icons/Icons';
+import { FileSearchIcon, ArrowLeftRightIcon, SparklesIcon, TargetIcon, FileTextIcon, HeartHandshakeIcon, ArrowRightIcon, CheckIcon, ArrowLeftIcon } from './icons/Icons';
 import Modal from './Modal';
 
 const features: Feature[] = [
@@ -93,6 +93,17 @@ const features: Feature[] = [
 
 const PlatformGrid: React.FC = () => {
   const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handlePrev = () => {
+    setActiveIndex((prevIndex) => (prevIndex - 1 + features.length) % features.length);
+  };
+
+  const handleNext = () => {
+    setActiveIndex((prevIndex) => (prevIndex + 1) % features.length);
+  };
+
+  const currentFeature = features[activeIndex];
 
   return (
     <>
@@ -106,7 +117,49 @@ const PlatformGrid: React.FC = () => {
         </h3>
       </div>
       <div className="mx-auto max-w-5xl rounded-lg border border-slate-200 bg-white p-4 sm:p-8 lg:p-12 shadow-lg">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        {/* Mobile Carousel */}
+        <div className="md:hidden">
+          <div className="relative">
+            <div onClick={() => setSelectedFeature(currentFeature)} className="cursor-pointer group flex flex-col gap-4 rounded-lg border border-slate-100 bg-slate-50/30 p-6 min-h-[280px]">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center text-theme-accent-primary">
+                    {currentFeature.icon}
+                </div>
+                <h3 className="text-lg font-semibold text-cleat-dark">{currentFeature.title}</h3>
+              </div>
+              <p className="text-base leading-relaxed text-slate-600 flex-grow">
+                {currentFeature.description}
+              </p>
+              <div className="flex items-center gap-1 text-sm font-medium text-primary mt-auto">
+                <span>Saber Más</span>
+                <ArrowRightIcon />
+              </div>
+            </div>
+            
+            {/* Arrows */}
+            <button onClick={handlePrev} aria-label="Anterior característica" className="absolute top-1/2 -translate-y-1/2 -left-3 bg-white/50 backdrop-blur-sm rounded-full p-1 text-slate-600 border border-slate-200 shadow-md hover:bg-white transition-colors">
+              <ArrowLeftIcon className="h-5 w-5" />
+            </button>
+            <button onClick={handleNext} aria-label="Siguiente característica" className="absolute top-1/2 -translate-y-1/2 -right-3 bg-white/50 backdrop-blur-sm rounded-full p-1 text-slate-600 border border-slate-200 shadow-md hover:bg-white transition-colors">
+              <ArrowRightIcon className="h-5 w-5" />
+            </button>
+          </div>
+          {/* Dots */}
+          <div className="flex justify-center gap-2 mt-6">
+              {features.map((_, index) => (
+                  <button 
+                      key={index} 
+                      onClick={() => setActiveIndex(index)}
+                      className={`h-2 w-2 rounded-full transition-colors ${activeIndex === index ? 'bg-primary' : 'bg-slate-300'}`}
+                      aria-label={`Ir a la característica ${index + 1}`}
+                  />
+              ))}
+          </div>
+        </div>
+
+        {/* Desktop Grid */}
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature) => (
             <div key={feature.title} onClick={() => setSelectedFeature(feature)} className="cursor-pointer group flex flex-col gap-4 rounded-lg border border-slate-100 bg-slate-50/30 p-6 transition-all duration-300 hover:border-primary/20 hover:bg-primary/5 hover:shadow-md hover:-translate-y-1">
               <div className="flex items-center gap-3">
