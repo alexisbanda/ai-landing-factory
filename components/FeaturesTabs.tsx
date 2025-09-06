@@ -57,8 +57,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
 // CONFIGURATION
 // =================================================================
 const featuresTabsConfig = {
-  layoutStyle: 'full-bleed' as 'contained' | 'full-bleed',
-  tabOrientation: 'vertical' as 'horizontal' | 'vertical',
+  layoutStyle: 'contained' as 'contained' | 'full-bleed',
+  tabOrientation: 'horizontal' as 'horizontal' | 'vertical',
 };
 // =================================================================
 
@@ -136,11 +136,7 @@ const FeaturesTabs: React.FC = () => {
     const [activeTab, setActiveTab] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const highlightRef = useRef<HTMLDivElement>(null);
-    const tabPanelsRef = useRef<(HTMLDivElement | null)[]>([]);
-    const [containerHeight, setContainerHeight] = useState<number | undefined>(undefined);
     const [loadedImages, setLoadedImages] = useState<boolean[]>(() => new Array(featuresData.length).fill(false));
-    const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-    const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({});
 
     const isFullBleed = featuresTabsConfig.layoutStyle === 'full-bleed';
     const isVerticalLayout = featuresTabsConfig.tabOrientation === 'vertical';
@@ -162,15 +158,6 @@ const FeaturesTabs: React.FC = () => {
         return () => { if (element) observer.unobserve(element); };
     }, []);
 
-    useEffect(() => {
-        const activePanel = tabPanelsRef.current[activeTab];
-        if (!activePanel) return;
-        const observer = new ResizeObserver(() => setContainerHeight(activePanel.scrollHeight));
-        observer.observe(activePanel);
-        setContainerHeight(activePanel.scrollHeight);
-        return () => observer.disconnect();
-    }, [activeTab]);
-
     const handleImageLoad = (index: number) => {
         setLoadedImages(prev => {
             if (prev[index]) return prev;
@@ -180,36 +167,6 @@ const FeaturesTabs: React.FC = () => {
         });
     };
     
-    const updateIndicatorPosition = useCallback(() => {
-        const activeButton = tabRefs.current[activeTab];
-        if (activeButton) {
-            const isDesktopVertical = isVerticalLayout && window.innerWidth >= 1024;
-            if (isDesktopVertical) {
-                setIndicatorStyle({
-                    transform: `translateY(${activeButton.offsetTop}px)`,
-                    height: `${activeButton.offsetHeight}px`,
-                    width: '100%',
-                });
-            } else {
-                setIndicatorStyle({
-                    transform: `translateX(${activeButton.offsetLeft}px)`,
-                    width: `${activeButton.offsetWidth}px`,
-                    height: '2.25rem',
-                });
-                activeButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-            }
-        }
-    }, [activeTab, isVerticalLayout]);
-
-    useEffect(() => {
-        const timeoutId = setTimeout(updateIndicatorPosition, 100);
-        window.addEventListener('resize', updateIndicatorPosition);
-        return () => {
-            clearTimeout(timeoutId);
-            window.removeEventListener('resize', updateIndicatorPosition);
-        };
-    }, [updateIndicatorPosition]);
-
     const imageRoundingClass = isFullBleed
         ? (isVerticalLayout ? 'md:rounded-lg' : 'md:rounded-l-lg md:rounded-r-none')
         : 'rounded-lg';
@@ -261,28 +218,19 @@ const FeaturesTabs: React.FC = () => {
                         <div role="tablist" className={`hidden relative ${
                             isVerticalLayout 
                             ? (isFullBleed ? 'lg:col-span-3 lg:col-start-2' : 'w-full') + ' lg:flex flex-col w-full max-w-sm mx-auto lg:w-full lg:max-w-none lg:space-y-1.5' 
-                            : 'lg:inline-flex items-center justify-start text-muted-foreground h-auto w-auto max-w-[95%] space-x-1.5 overflow-x-auto rounded-lg bg-slate-100 p-1.5'
+                            : 'lg:flex items-center justify-center text-muted-foreground h-auto w-full space-x-1.5 rounded-lg bg-slate-100 p-1.5'
                         }`}>
-                            <div
-                                className={`absolute transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${
-                                    isVerticalLayout 
-                                    ? 'top-0 left-0 rounded-lg bg-slate-100 lg:block' 
-                                    : 'top-[6px] rounded-md bg-white shadow-sm'
-                                }`}
-                                style={indicatorStyle}
-                            />
                             {featuresData.map((feature, index) => (
                                 <button
                                     key={index}
-                                    ref={(el) => { if(el) tabRefs.current[index] = el; }}
                                     role="tab"
                                     aria-selected={activeTab === index}
                                     data-state={activeTab === index ? 'active' : 'inactive'}
                                     onClick={() => setActiveTab(index)}
-                                    className={`relative z-10 group whitespace-nowrap bg-transparent focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 !mb-0 flex items-center transition-colors duration-300 ${
+                                    className={`z-10 group whitespace-nowrap focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 !mb-0 flex items-center transition-colors duration-300 ${
                                         isVerticalLayout
-                                        ? 'w-full justify-start gap-3 rounded-lg p-4 font-semibold text-slate-600 hover:bg-slate-100/50 data-[state=active]:text-primary'
-                                        : 'h-9 justify-center rounded-md border-0 px-4 py-2 text-sm font-medium text-slate-500 hover:text-primary data-[state=active]:text-primary sm:group-data-[state=active]:justify-start sm:group-data-[state=active]:gap-2 lg:justify-start lg:gap-2'
+                                        ? 'w-full justify-start gap-3 rounded-lg p-4 font-semibold text-slate-600 hover:bg-slate-100/50 data-[state=active]:text-primary data-[state=active]:bg-slate-100'
+                                        : 'h-9 justify-center rounded-md border-0 px-4 py-2 text-sm font-medium text-slate-500 hover:text-primary data-[state=active]:text-primary sm:group-data-[state=active]:justify-start sm:group-data-[state=active]:gap-2 lg:justify-start lg:gap-2 data-[state=active]:bg-white data-[state=active]:shadow-sm'
                                     }`}
                                 >
                                     <div className={`transition-transform duration-300 ${isVerticalLayout ? 'group-data-[state=active]:scale-110' : 'group-hover:scale-110 group-hover:-rotate-6 data-[state=active]:group-hover:scale-100 data-[state=active]:group-hover:rotate-0'}`}>
@@ -294,22 +242,18 @@ const FeaturesTabs: React.FC = () => {
                         </div>
                         
                         {/* Content Container */}
-                        <div 
-                            className={`
-                                relative w-full transition-[height] duration-500 ease-in-out overflow-hidden
-                                ${isVerticalLayout && isFullBleed ? 'lg:col-span-8' : ''}
-                                ${!isVerticalLayout ? 'lg:mt-8 lg:md:mt-16' : ''}
-                            `}
-                            style={{ height: containerHeight ? `${containerHeight}px` : undefined }}
-                        >
-                             {featuresData.map((feature, index) => (
+                        <div className={`
+                            relative grid w-full
+                            ${isVerticalLayout && isFullBleed ? 'lg:col-span-8' : ''}
+                            ${!isVerticalLayout ? 'lg:mt-8 lg:md:mt-16' : ''}
+                        `}>
+                            {featuresData.map((feature, index) => (
                                 <div
-                                    ref={(el) => { if(el) tabPanelsRef.current[index] = el; }}
                                     key={index}
                                     role="tabpanel"
                                     data-state={activeTab === index ? 'active' : 'inactive'}
                                     className={`
-                                        absolute inset-0 w-full transition-opacity duration-500 data-[state=inactive]:opacity-0 data-[state=inactive]:pointer-events-none data-[state=active]:opacity-100 max-md:px-6
+                                        col-start-1 row-start-1 w-full transition-opacity duration-500 data-[state=inactive]:opacity-0 data-[state=inactive]:pointer-events-none data-[state=active]:opacity-100 max-md:px-6
                                         ${
                                             isVerticalLayout
                                             ? 'flex flex-col-reverse md:flex-row md:items-start' // Layout for Vertical (always two columns side-by-side)
@@ -327,7 +271,7 @@ const FeaturesTabs: React.FC = () => {
                                             ? 'md:w-1/2 md:pr-12' // Vertical layout gets 50% width and padding
                                             : (isFullBleed 
                                                 ? 'max-md:px-6 md:col-start-1 md:flex md:justify-center md:items-center' // Horizontal full-bleed styling
-                                                : 'max-md:px-6 md:min-w-[50%] lg:min-w-[38%]' // Horizontal contained styling
+                                                : 'max-md:px-6 md:w-1/2' // Horizontal contained styling
                                             )
                                         }
                                     `}>
@@ -368,7 +312,7 @@ const FeaturesTabs: React.FC = () => {
                                             ? 'md:w-1/2 md:self-stretch' // Vertical layout gets 50% width and stretches
                                             : (isFullBleed 
                                                 ? 'max-md:px-6 md:col-start-2' // Horizontal full-bleed styling
-                                                : 'max-md:px-6 md:h-full md:flex-1' // Horizontal contained styling
+                                                : 'max-md:px-6 md:h-full md:w-1/2' // Horizontal contained styling
                                             )
                                         }
                                     `}>
@@ -489,4 +433,3 @@ const FeaturesTabs: React.FC = () => {
 };
 
 export default FeaturesTabs;
-
