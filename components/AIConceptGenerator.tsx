@@ -1,29 +1,37 @@
-
 import React, { useState } from 'react';
 import { generateLandingConcept, regenerateHeadline, LandingConcept } from '../services/geminiService';
-import { SparklesIcon, LoaderIcon, CheckIcon, FileTextIcon, ArrowLeftRightIcon, RefreshCwIcon } from './icons/Icons';
+import { SparklesIcon, LoaderIcon, CheckIcon, FileTextIcon, ArrowLeftRightIcon, RefreshCwIcon, MessageCircleQuestionIcon, BotMessageSquareIcon, ClipboardPenIcon } from './icons/Icons';
 
-type Step = 1 | 2 | 3;
+// Updated to a 4-step process
+type Step = 1 | 2 | 3 | 4;
 type Audience = "Emprendedores" | "Marketers" | "Desarrolladores" | "Público General" | "Otro...";
 type Goal = "Generar Leads" | "Vender un Producto" | "Obtener Registros" | "Anunciar un Evento" | "Otro...";
 type Tone = "Profesional" | "Amistoso" | "Urgente" | "Inspirador" | "Otro...";
+
+// New type for AI Components
+type AiComponentType = "Asistente de Ventas (Chatbot)" | "FAQ Inteligente" | "Quiz Interactivo";
 
 const audiences: Audience[] = ["Emprendedores", "Marketers", "Desarrolladores", "Público General", "Otro..."];
 const goals: Goal[] = ["Generar Leads", "Vender un Producto", "Obtener Registros", "Anunciar un Evento", "Otro..."];
 const tones: Tone[] = ["Profesional", "Amistoso", "Urgente", "Inspirador", "Otro..."];
 
+// Data for the new AI Component step
+const aiComponents: { name: AiComponentType; description: string; icon: React.FC<{className?: string}> }[] = [
+    { name: "Asistente de Ventas (Chatbot)", description: "Un chatbot que responde preguntas y captura leads 24/7.", icon: BotMessageSquareIcon },
+    { name: "FAQ Inteligente", description: "Una sección de FAQs que responde dudas al instante.", icon: MessageCircleQuestionIcon },
+    { name: "Quiz Interactivo", description: "Un quiz que guía y califica a tus visitantes.", icon: ClipboardPenIcon },
+];
+
 const AIConceptGenerator: React.FC = () => {
     const [currentStep, setCurrentStep] = useState<Step>(1);
     const [productInfo, setProductInfo] = useState({ what: '', problem: '', features: '' });
-    
+    const [selectedAiComponent, setSelectedAiComponent] = useState<AiComponentType>('Asistente de Ventas (Chatbot)');
     const [selectedAudience, setSelectedAudience] = useState<Audience>('Marketers');
     const [selectedGoal, setSelectedGoal] = useState<Goal>('Generar Leads');
     const [selectedTone, setSelectedTone] = useState<Tone>('Profesional');
-
     const [customAudience, setCustomAudience] = useState('');
     const [customGoal, setCustomGoal] = useState('');
     const [customTone, setCustomTone] = useState('');
-
     const [isLoading, setIsLoading] = useState(false);
     const [isRegenerating, setIsRegenerating] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -46,20 +54,20 @@ const AIConceptGenerator: React.FC = () => {
         setIsLoading(true);
         setError(null);
         setResult(null);
-        setCurrentStep(3);
+        setCurrentStep(4); // Concept is now step 4
 
         const { finalAudience, finalGoal, finalTone } = getFinalInputs();
 
         if (!finalAudience.trim() || !finalGoal.trim() || !finalTone.trim()) {
             setError("Por favor, completa los campos personalizados.");
             setIsLoading(false);
-            setCurrentStep(2);
+            setCurrentStep(3); // Go back to details step
             return;
         }
 
         try {
             const fullDescription = `Producto: ${productInfo.what}. Problema que resuelve: ${productInfo.problem}. Características clave: ${productInfo.features}.`;
-            const concept = await generateLandingConcept(fullDescription, finalAudience, finalGoal, finalTone);
+            const concept = await generateLandingConcept(fullDescription, finalAudience, finalGoal, finalTone, selectedAiComponent);
             setResult(concept);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Ocurrió un error desconocido.');
@@ -78,7 +86,6 @@ const AIConceptGenerator: React.FC = () => {
             const newHeadlineData = await regenerateHeadline(fullDescription, finalAudience, finalGoal, finalTone, result.headline);
             setResult(prevResult => prevResult ? { ...prevResult, headline: newHeadlineData.headline } : null);
         } catch (err) {
-            // Optionally set a small error message next to the button
             console.error("Failed to regenerate headline");
         } finally {
             setIsRegenerating(false);
@@ -90,13 +97,14 @@ const AIConceptGenerator: React.FC = () => {
             <div className="relative h-2 w-full rounded-full bg-slate-200">
                 <div 
                     className="absolute top-0 left-0 h-2 rounded-full bg-primary transition-all duration-500 ease-out"
-                    style={{ width: `${((currentStep - 1) / 2) * 100}%` }}
+                    style={{ width: `${((currentStep - 1) / 3) * 100}%` }} // Updated for 4 steps
                 />
             </div>
-            <div className="mt-2 flex justify-between text-sm font-semibold text-slate-500">
+            <div className="mt-2 grid grid-cols-4 text-center text-sm font-semibold text-slate-500">
                 <span className={currentStep >= 1 ? 'text-primary' : ''}>Oferta</span>
-                <span className={currentStep >= 2 ? 'text-primary' : ''}>Detalles</span>
-                <span className={currentStep >= 3 ? 'text-primary' : ''}>Concepto</span>
+                <span className={currentStep >= 2 ? 'text-primary' : ''}>Componente IA</span>
+                <span className={currentStep >= 3 ? 'text-primary' : ''}>Detalles</span>
+                <span className={currentStep >= 4 ? 'text-primary' : ''}>Concepto</span>
             </div>
         </div>
     );
@@ -126,51 +134,42 @@ const AIConceptGenerator: React.FC = () => {
                                 <div className="space-y-4">
                                     <div>
                                         <label htmlFor="what" className="block text-sm font-semibold text-slate-700 mb-1">1. ¿Qué producto, servicio u oferta quieres promocionar?</label>
-                                        <input
-                                            type="text"
-                                            id="what"
-                                            name="what"
-                                            value={productInfo.what}
-                                            onChange={handleInputChange}
-                                            placeholder="Ej: Una app de yoga para principiantes"
-                                            className="w-full p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                                        />
+                                        <input type="text" id="what" name="what" value={productInfo.what} onChange={handleInputChange} placeholder="Ej: Una app de yoga para principiantes" className="w-full p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" />
                                     </div>
                                     <div>
                                         <label htmlFor="problem" className="block text-sm font-semibold text-slate-700 mb-1">2. ¿Cuál es el principal problema que resuelve?</label>
-                                        <input
-                                            type="text"
-                                            id="problem"
-                                            name="problem"
-                                            value={productInfo.problem}
-                                            onChange={handleInputChange}
-                                            placeholder="Ej: Ayuda a la gente a empezar a hacer ejercicio sin sentirse intimidada"
-                                            className="w-full p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                                        />
+                                        <input type="text" id="problem" name="problem" value={productInfo.problem} onChange={handleInputChange} placeholder="Ej: Ayuda a la gente a empezar a hacer ejercicio sin sentirse intimidada" className="w-full p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" />
                                     </div>
                                     <div>
                                         <label htmlFor="features" className="block text-sm font-semibold text-slate-700 mb-1">3. Menciona 1 o 2 características clave (opcional)</label>
-                                        <input
-                                            type="text"
-                                            id="features"
-                                            name="features"
-                                            value={productInfo.features}
-                                            onChange={handleInputChange}
-                                            placeholder="Ej: Clases en vivo y seguimiento personalizado"
-                                            className="w-full p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                                        />
+                                        <input type="text" id="features" name="features" value={productInfo.features} onChange={handleInputChange} placeholder="Ej: Clases en vivo y seguimiento personalizado" className="w-full p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" />
                                     </div>
                                 </div>
-                                <button
-                                    onClick={() => setCurrentStep(2)}
-                                    disabled={!productInfo.what.trim() || !productInfo.problem.trim()}
-                                    className="w-full sm:w-auto float-right bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition-all disabled:bg-slate-400 disabled:cursor-not-allowed"
-                                >
-                                    Siguiente
-                                </button>
+                                <button onClick={() => setCurrentStep(2)} disabled={!productInfo.what.trim() || !productInfo.problem.trim()} className="w-full sm:w-auto float-right bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition-all disabled:bg-slate-400 disabled:cursor-not-allowed">Siguiente</button>
                             </div>
                         )}
                         {currentStep === 2 && (
+                            <div className="animate-fade-in-up space-y-6">
+                                <div className="text-center">
+                                     <h2 className="text-xl font-bold text-cleat-dark">Elige tu Componente de IA Interactivo</h2>
+                                     <p className="text-sm text-slate-500">Esto le dará un superpoder a tu landing page.</p>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    {aiComponents.map(comp => (
+                                        <button key={comp.name} onClick={() => setSelectedAiComponent(comp.name)} className={`p-4 border rounded-lg text-left transition-all flex flex-col items-center text-center ${selectedAiComponent === comp.name ? 'bg-primary/10 text-primary ring-2 ring-primary' : 'bg-white hover:bg-slate-50'}`}>
+                                            <comp.icon className="h-8 w-8 mb-2 text-primary" />
+                                            <span className="font-bold text-base text-cleat-dark">{comp.name}</span>
+                                            <span className="text-xs text-slate-500 mt-1">{comp.description}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="flex justify-between pt-2">
+                                    <button onClick={() => setCurrentStep(1)} className="bg-slate-200 text-slate-700 font-bold py-3 px-8 rounded-lg hover:bg-slate-300 transition-all">Anterior</button>
+                                    <button onClick={() => setCurrentStep(3)} className="bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition-all">Siguiente</button>
+                                </div>
+                            </div>
+                        )}
+                        {currentStep === 3 && (
                              <div className="animate-fade-in-up space-y-4">
                                 <div className="space-y-2">
                                     <h3 className="text-lg font-bold text-cleat-dark text-center">¿Quién es tu público objetivo?</h3>
@@ -200,7 +199,7 @@ const AIConceptGenerator: React.FC = () => {
                                     {selectedTone === 'Otro...' && <input type="text" value={customTone} onChange={e => setCustomTone(e.target.value)} placeholder="Define tu tono" className="w-full mt-2 p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" />}
                                 </div>
                                 <div className="flex justify-between pt-2">
-                                    <button onClick={() => setCurrentStep(1)} className="bg-slate-200 text-slate-700 font-bold py-3 px-8 rounded-lg hover:bg-slate-300 transition-all">Anterior</button>
+                                    <button onClick={() => setCurrentStep(2)} className="bg-slate-200 text-slate-700 font-bold py-3 px-8 rounded-lg hover:bg-slate-300 transition-all">Anterior</button>
                                     <button onClick={handleGenerateConcept} className="bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition-all flex items-center gap-2">
                                         <SparklesIcon className="h-5 w-5" />
                                         Generar Hoja de Ruta
@@ -208,7 +207,7 @@ const AIConceptGenerator: React.FC = () => {
                                 </div>
                             </div>
                         )}
-                        {currentStep === 3 && (
+                        {currentStep === 4 && (
                             <div className="animate-fade-in-up">
                                 {isLoading && (
                                     <div className="flex flex-col items-center gap-4 text-primary text-center">
@@ -220,7 +219,7 @@ const AIConceptGenerator: React.FC = () => {
                                     <div className="text-center text-status-error bg-red-100 p-4 rounded-lg">
                                         <p className="font-semibold">Error al generar el concepto:</p>
                                         <p>{error}</p>
-                                        <button onClick={() => setCurrentStep(2)} className="mt-4 bg-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-opacity-90">Intentar de Nuevo</button>
+                                        <button onClick={() => setCurrentStep(3)} className="mt-4 bg-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-opacity-90">Intentar de Nuevo</button>
                                     </div>
                                 )}
                                 {result && (
@@ -229,15 +228,19 @@ const AIConceptGenerator: React.FC = () => {
                                             <h3 className="text-sm font-bold uppercase text-primary tracking-wider mb-2">Titular y Subtítulo</h3>
                                             <p className="text-2xl font-bold text-cleat-dark">"{result.headline}"</p>
                                             <p className="text-slate-600 mt-2">{result.subheadline}</p>
-                                            <button 
-                                                onClick={handleRegenerateHeadline}
-                                                disabled={isRegenerating}
-                                                className="absolute top-2 right-2 p-1 text-slate-400 hover:text-primary rounded-full transition-colors disabled:cursor-not-allowed"
-                                                aria-label="Regenerar titular"
-                                            >
+                                            <button onClick={handleRegenerateHeadline} disabled={isRegenerating} className="absolute top-2 right-2 p-1 text-slate-400 hover:text-primary rounded-full transition-colors disabled:cursor-not-allowed" aria-label="Regenerar titular">
                                                 {isRegenerating ? <LoaderIcon className="h-4 w-4 animate-spin" /> : <RefreshCwIcon className="h-4 w-4" />}
                                             </button>
                                         </div>
+
+                                        {result.aiComponentSuggestion && (
+                                            <div className="p-6 rounded-lg bg-primary/10 border-2 border-dashed border-primary/30 text-center">
+                                                <h3 className="text-sm font-bold uppercase text-primary tracking-wider mb-2">Sugerencia para Componente IA: {result.aiComponentSuggestion.componentType}</h3>
+                                                <p className="text-xl font-bold text-cleat-dark">"{result.aiComponentSuggestion.title}"</p>
+                                                <p className="text-slate-600 mt-2 text-sm"><b>Sugerencia de prompt:</b> {result.aiComponentSuggestion.promptSuggestion}</p>
+                                                <p className="text-slate-600 mt-1 text-sm"><b>Integración con el objetivo:</b> {result.aiComponentSuggestion.ctaIntegration}</p>
+                                            </div>
+                                        )}
                                         
                                         <div className="grid md:grid-cols-2 gap-6">
                                             <div className="space-y-4">
@@ -294,11 +297,24 @@ const AIConceptGenerator: React.FC = () => {
                                             </div>
                                         </div>
 
+                                        {/* Lead Capture Form for Netlify */}
                                         <div className="mt-6 text-center bg-green-50 border-t-4 border-green-400 p-4 rounded-b-lg">
                                             <h3 className="text-lg font-bold text-green-800">¡Tu Hoja de Ruta Estratégica está lista!</h3>
                                             <p className="text-green-700 mt-1 text-sm">Ingresa tu email para recibir el plan completo y empezar tu prueba gratuita.</p>
-                                            <form className="mt-4 flex flex-col sm:flex-row gap-2 justify-center" onSubmit={(e) => e.preventDefault()}>
-                                                <input type="email" value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} placeholder="tu@email.com" required className="flex-grow px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+                                            <form name="concept-form" method="POST" data-netlify="true" action="/thank-you.html" className="mt-4 flex flex-col sm:flex-row gap-2 justify-center">
+                                                <input type="hidden" name="form-name" value="concept-form" />
+                                                {result && (
+                                                    <>
+                                                        <input type="hidden" name="headline" value={result.headline} />
+                                                        <input type="hidden" name="subheadline" value={result.subheadline} />
+                                                        <input type="hidden" name="keyBenefits" value={JSON.stringify(result.keyBenefits)} />
+                                                        <input type="hidden" name="cta" value={result.cta} />
+                                                        <input type="hidden" name="pageOutline" value={JSON.stringify(result.pageOutline)} />
+                                                        <input type="hidden" name="abTestSuggestion" value={result.abTestSuggestion.headline} />
+                                                        <input type="hidden" name="aiComponentSuggestion" value={JSON.stringify(result.aiComponentSuggestion)} />
+                                                    </>
+                                                )}
+                                                <input type="email" name="email" value={leadEmail} onChange={(e) => setLeadEmail(e.target.value)} placeholder="tu@email.com" required className="flex-grow px-4 py-2 border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" />
                                                 <button type="submit" className="bg-green-600 text-white font-bold py-2 px-6 rounded-md hover:bg-green-700 transition-all">Enviar Plan</button>
                                             </form>
                                         </div>

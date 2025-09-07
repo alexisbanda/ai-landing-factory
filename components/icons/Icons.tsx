@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export const Logo: React.FC<{ className?: string; variant?: 'dark' | 'light' }> = ({ className, variant = 'dark' }) => (
@@ -190,5 +189,23 @@ export const RefreshCwIcon: React.FC<{className?: string}> = ({ className }) => 
       <path d="M21 12A9 9 0 0 0 6 5.3L3 8"/>
       <path d="M21 22v-6h-6"/>
       <path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"/>
+    </svg>
+);
+
+export const MessageCircleQuestionIcon: React.FC<{className?: string}> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+);
+
+export const BotMessageSquareIcon: React.FC<{className?: string}> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <path d="M12 6V2H8"/><path d="m8 18-4 4V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z"/><path d="M2 12h2"/><path d="M9 12h2"/><path d="M16 12h2"/>
+    </svg>
+);
+
+export const ClipboardPenIcon: React.FC<{className?: string}> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+        <path d="M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10.4 12.6a2 2 0 0 1 3 3L8 21l-4 1 1-4Z"/>
     </svg>
 );

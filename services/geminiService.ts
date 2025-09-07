@@ -1,3 +1,4 @@
+
 import { FaqItem } from '../types';
 
 // Static data is kept as a reliable fallback and for when the API is disabled.
@@ -10,7 +11,7 @@ const staticFaqData: FaqItem[] = [
   { question: "¿Las páginas son rápidas y están optimizadas para SEO?", answer: "Absolutamente. La velocidad es una de nuestras principales prioridades. Todas las páginas generadas con VANLANDINGS están optimizadas para las Core Web Vitals de Google y vienen con herramientas SEO integradas para ayudarte a posicionar mejor en los resultados de búsqueda." }
 ];
 
-// Re-exporting the interface for use in components
+// Updated interface to include the AI component suggestion
 export interface LandingConcept {
   headline: string;
   subheadline: string;
@@ -19,6 +20,12 @@ export interface LandingConcept {
   pageOutline: { section: string; description: string }[];
   imageSuggestions: { section: string; suggestion: string }[];
   abTestSuggestion: { headline: string };
+  aiComponentSuggestion: {
+    componentType: string;
+    title: string;
+    promptSuggestion: string;
+    ctaIntegration: string;
+  };
 }
 
 /**
@@ -53,7 +60,8 @@ export const generateLandingConcept = async (
   description: string,
   audience: string,
   goal: string,
-  tone: string
+  tone: string,
+  aiComponent: string // Added aiComponent parameter
 ): Promise<LandingConcept> => {
   try {
     const response = await fetch('/.netlify/functions/generateConcept', {
@@ -61,7 +69,7 @@ export const generateLandingConcept = async (
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ description, audience, goal, tone }),
+      body: JSON.stringify({ description, audience, goal, tone, aiComponent }), // Pass it to the function
     });
 
     if (!response.ok) {
