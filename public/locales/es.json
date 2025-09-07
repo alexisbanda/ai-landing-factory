@@ -1,15 +1,21 @@
 {
   "hero": {
-    "title_part1": "Crea Páginas de Aterrizaje Que Convierten, <br />",
-    "title_part2": "en Segundos",
-    "title_part3": "con IA",
-    "description_part1": "Deja de luchar con constructores complejos. Empieza a crear páginas de aterrizaje de alto rendimiento con ",
-    "description_part2": "—la forma más rápida de convertir tus ideas en máquinas de generar prospectos.",
-    "cta_free": "EMPIEZA GRATIS",
-    "cta_demo": "VER DEMO",
-    "social_proof_title": "IMPULSADO POR TECNOLOGÍA DE VANGUARDIA",
+    "title_part1": "Tu Próxima Landing Page: ",
+    "title_part2": "Inteligente y Rentable",
+    "title_part3": "en Días",
+    "description_part1": "Dejamos atrás a las agencias lentas y a las plantillas limitadas. Creamos para ti un motor de crecimiento con IA, a un precio que tiene sentido.",
+    "description_part2": "",
+    "cta_free": "Inicia tu Diagnóstico IA Gratis",
+    "cta_demo": "Conocer el Proceso",
+    "social_proof_title": "INTEGRAMOS LAS TECNOLOGÍAS QUE YA USAS",
     "benefit1": "Prueba gratis de 7 días",
     "benefit2": "Contenido con IA",
-    "benefit3": "Rápido y Optimizado para SEO"
+    "benefit3": "Rápido y Optimizado para SEO",
+    "key_feature1_title": "Inteligencia de Serie",
+    "key_feature1_description": "Cada landing page que creamos viene equipada con capacidades de IA avanzadas, transformando tu web en un activo que trabaja 24/7 para tu negocio.",
+    "key_feature2_title": "Lanzamiento Ultra-Rápido",
+    "key_feature2_description": "Nuestro proceso acelerado por IA te permite tener tu web operativa y generando resultados en días, no en meses.",
+    "key_feature3_title": "Alianza Estratégica",
+    "key_feature3_description": "No solo construimos tu web, la acompañamos y mejoramos continuamente para que crezca contigo."
   }
 }

@@ -54,18 +54,18 @@ const Hero: React.FC<HeroProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
     const keyFeatures = [
         {
             icon: <SparklesIcon />,
-            title: "Contenido Impulsado por IA",
-            description: "Genera textos de alta conversión en segundos, adaptados a tu audiencia."
+            title: t('hero.key_feature1_title'),
+            description: t('hero.key_feature1_description'),
         },
         {
             icon: <ZapIcon />,
-            title: "Despliegue Rápido",
-            description: "Pasa de la idea a una página activa y optimizada en minutos, no en semanas."
+            title: t('hero.key_feature2_title'),
+            description: t('hero.key_feature2_description'),
         },
         {
             icon: <FileSearchIcon />,
-            title: "Optimización Continua",
-            description: "Usa pruebas A/B y analíticas integradas para maximizar tus resultados."
+            title: t('hero.key_feature3_title'),
+            description: t('hero.key_feature3_description'),
         }
     ];
 
@@ -196,7 +196,7 @@ const Hero: React.FC<HeroProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
 
 
   return (
-    <section className={`relative w-full overflow-hidden py-16 md:py-20 text-center ${isDark ? 'bg-cleat-dark' : 'bg-neutral-50'}`}>
+    <section className={`relative w-full overflow-hidden flex items-center min-h-screen text-center ${isDark ? 'bg-cleat-dark' : 'bg-neutral-50'}`}>
       {heroConfig.showBackgroundImage && heroConfig.backgroundImage.url && (
         <div 
           className={`absolute inset-0 z-0 bg-cover bg-center transition-all duration-500 ${heroConfig.backgroundImage.blur} ${heroConfig.backgroundImage.brightness} ${heroConfig.backgroundImage.opacity}`}

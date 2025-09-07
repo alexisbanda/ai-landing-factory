@@ -1,26 +1,26 @@
 export const steps = [
   {
-    icon: 'FileTextIcon',
-    title: "Describe",
-  description: "Dinos en 1–3 frases qué ofreces, a quién va dirigido y el beneficio clave. Con eso la IA genera la estructura, titulares y propuesta de valor listos para convertir.",
+    icon: 'FileSearchIcon',
+    title: "Diagnóstico",
+    description: "Todo comienza con nuestro wizard inteligente. En 5 minutos, nos das los detalles clave de tu negocio, objetivos y público. La IA analiza esta información para crear un brief de proyecto preciso.",
     colors: { bg: 'bg-categorical-blue-light', border: 'border-blue-200', text: 'text-categorical-blue-mid' },
     gradient: 'to-categorical-blue-light',
     displayType: 'typing-prompt',
     displayData: {
       prompts: [
-        "SaaS para gestión de equipos: ahorro de tiempo para pymes, integración con Slack y facturación...",
-        "Tienda online de cerámica artesanal: productos únicos, envíos internacionales, público femenino 25-45...",
-        "App de fitness personalizada: planes por suscripción, planes adaptativos y seguimiento de progreso..."
+        "¿Qué vendes? ¿A quién? ¿Qué problema resuelves?",
+        "¿Cuál es tu objetivo principal con esta landing page?",
+        "¿Quién es tu cliente ideal? Descríbelo brevemente."
       ]
     },
     enabled: true,
   },
   {
-    icon: 'SparklesIcon',
-    title: "Genera",
-  description: "En segundos obtienes una landing estructurada: titulares orientados a beneficio, secciones para pruebas sociales y CTAs optimizados para convertir visitantes en leads.",
-    colors: { bg: 'bg-categorical-green-light', border: 'border-green-200', text: 'text-categorical-green-mid' },
-    gradient: 'to-categorical-green-light',
+    icon: 'HeartHandshakeIcon',
+    title: "Estrategia",
+    description: "Un plan de IA es un gran comienzo, pero la experiencia humana es irremplazable. Uno de nuestros estrategas revisará el plan contigo y se asegurará de que cada detalle esté alineado con tu visión.",
+    colors: { bg: 'bg-categorical-orange-light', border: 'border-orange-200', text: 'text-categorical-orange-mid' },
+    gradient: 'to-categorical-orange-light',
     displayType: 'video',
     displayData: {
       src: 'https://videos.pexels.com/video-files/853828/853828-hd_1920_1080_25fps.mp4',
@@ -29,9 +29,9 @@ export const steps = [
     enabled: true,
   },
   {
-    icon: 'GavelIcon',
-    title: "Personaliza",
-  description: "Personaliza diseño y copy en nuestro editor visual: arrastra, reemplaza y publica en tiempo real. Mantén coherencia de marca sin tocar código.",
+    icon: 'SparklesIcon',
+    title: "Creación",
+    description: "Aquí es donde ocurre la magia. Nuestros agentes de IA, supervisados por desarrolladores expertos, toman el plan y construyen tu landing page. Textos, diseño, código... con la más alta calidad.",
     colors: { bg: 'bg-categorical-violet-light', border: 'border-violet-200', text: 'text-categorical-violet-mid' },
     gradient: 'to-categorical-violet-light',
     displayType: 'ui-editor',
@@ -72,32 +72,5 @@ export const steps = [
       lineChartData: [20, 35, 30, 50, 45, 70, 80] // Represents trend over 7 days
     },
     enabled: true,
-  },
-  {
-    icon: 'FileSearchIcon',
-    title: "Optimiza",
-  description: "Lanza tests A/B automáticos: la IA prueba variantes de titulares, imágenes y CTAs, y recomienda la versión ganadora con métricas claras.",
-    colors: { bg: 'bg-categorical-blue-light', border: 'border-blue-200', text: 'text-categorical-blue-mid' },
-    gradient: 'to-categorical-blue-light',
-    displayType: 'ab-testing',
-    enabled: false,
-  },
-  {
-    icon: 'ArrowLeftRightIcon',
-    title: "Identifica",
-  description: "Escanea tu web o subida de activos para extraer logo, paleta y tipografías; generamos tres opciones de diseño alineadas a tu marca.",
-    colors: { bg: 'bg-categorical-green-light', border: 'border-green-200', text: 'text-categorical-green-mid' },
-    gradient: 'to-categorical-green-light',
-    displayType: 'brand-scanner',
-    enabled: false,
-  },
-  {
-    icon: 'SparklesIcon',
-    title: "Ilustra",
-  description: "Genera imágenes e iconos a partir de un prompt—variantes optimizadas por formato (hero, thumbnail, social) y libres de problemas de licencia.",
-    colors: { bg: 'bg-categorical-violet-light', border: 'border-violet-200', text: 'text-categorical-violet-mid' },
-    gradient: 'to-categorical-violet-light',
-    displayType: 'image-generation',
-    enabled: false,
   }
 ];

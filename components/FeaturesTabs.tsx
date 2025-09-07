@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Feature } from '../types';
-import { FileSearchIcon, ArrowLeftRightIcon, SparklesIcon, TargetIcon, FileTextIcon, HeartHandshakeIcon, ArrowRightIcon, CheckIcon, ArrowLeftIcon } from './icons/Icons';
+import { FileSearchIcon, ArrowLeftRightIcon, SparklesIcon, TargetIcon, FileTextIcon, HeartHandshakeIcon, ArrowRightIcon, CheckIcon, ArrowLeftIcon, ZapIcon, GavelIcon } from './icons/Icons';
 
 // =================================================================
 
@@ -64,71 +64,60 @@ const featuresTabsConfig = {
 
 
 const featuresData: TabFeature[] = [
-    { 
-        icon: <SparklesIcon />, 
-        title: "Redactor IA", 
-        uppercaseTitle: "REDACTOR IA",
-        headingMain: "Genera Textos Que ",
-        headingGradient: "Convierten, al Instante",
-        description: "Supera el bloqueo del escritor. Nuestra IA genera titulares, descripciones y llamadas a la acción convincentes y adaptados a tu audiencia.", 
-        details: ["Utiliza los marcos de marketing de mayor rendimiento.", "Refina y regenera el texto con un solo clic."], 
-        image: "https://images.unsplash.com/photo-1516048015947-89335d862b2b?q=80&w=2864&auto=format&fit=crop", 
-        link: "#" 
+    {
+        icon: <SparklesIcon />,
+        title: "Inteligencia de Serie",
+        uppercaseTitle: "TU WEB, UN EMPLEADO MÁS",
+        headingMain: "Cada Landing Page, ",
+        headingGradient: "un Agente Inteligente",
+        description: "No ofrecemos la IA como un extra caro. Es nuestro estándar. Cada página que construimos viene equipada con capacidades de IA avanzadas, transformando tu web en un activo que trabaja 24/7 para tu negocio.",
+        details: ["Chatbots inteligentes para capturar leads.", "Contenido dinámico optimizado por IA.", "Una ventaja competitiva real, incluida de serie."],
+        image: "https://images.unsplash.com/photo-1516048015947-89335d862b2b?q=80&w=2864&auto=format&fit=crop",
+        link: "#"
     },
-    { 
-        icon: <ArrowLeftRightIcon />, 
-        title: "Diseño Inteligente",
-        uppercaseTitle: "DISEÑO INTELIGENTE",
-        headingMain: "Tu Marca, Perfectamente ",
-        headingGradient: "Representada",
-        description: "Se acabó el tedioso trabajo de diseño. Nuestra IA analiza los activos de tu marca para crear diseños hermosos y acordes a tu marca en segundos.", 
-        details: ["Aplica al instante tu logo, colores y tipografías.", "Elige de una biblioteca de plantillas impresionantes y enfocadas en la conversión."], 
-        image: "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=2864&auto=format&fit=crop", 
-        link: "#" 
+    {
+        icon: <ZapIcon />,
+        title: "Lanzamiento Ultra-Rápido",
+        uppercaseTitle: "VELOCIDAD QUE IMPULSA",
+        headingMain: "Tu Landing Operativa ",
+        headingGradient: "en Días, no Meses",
+        description: "Gracias a nuestra metodología híbrida IA-humana, tu landing page estará operativa y generando resultados en días, no en meses. Eliminamos los cuellos de botella y la burocracia de los procesos tradicionales.",
+        details: ["Proceso de creación acelerado y eficiente.", "Reducción drástica de tiempos de espera.", "Agilidad para adaptarse al mercado."],
+        image: "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=2864&auto=format&fit=crop",
+        link: "#"
     },
-    { 
-        icon: <TargetIcon />, 
-        title: "Analíticas y Pruebas A/B",
-        uppercaseTitle: "ANALÍTICAS Y PRUEBAS A/B",
-        headingMain: "Decisiones Basadas en Datos, ",
-        headingGradient: "Simplificadas",
-        description: "Deja de adivinar qué funciona. Mide métricas clave y prueba variantes automáticamente para encontrar la combinación ganadora que impulse tus conversiones.", 
-        details: ["Mide visitantes, tasa de rebote y conversiones de prospectos.", "Nuestra IA ejecuta pruebas automáticamente y muestra la versión con mejor rendimiento."], 
-        image: "https://images.unsplash.com/photo-1560472354-b33ff08c84a4?q=80&w=2814&auto=format&fit=crop", 
-        link: "#" 
+    {
+        icon: <ArrowLeftRightIcon />,
+        title: "Diseño Estratégico",
+        uppercaseTitle: "BELLEZA QUE CONVIERTE",
+        headingMain: "Diseño Único, ",
+        headingGradient: "Optimizado para Vender",
+        description: "Nuestra IA propone, pero el ojo experto humano refina. Creamos diseños únicos que no solo son estéticos, sino que están pensados para convertir y reflejar tu marca a la perfección, garantizando una experiencia de usuario impecable.",
+        details: ["Diseños basados en tu identidad de marca.", "Optimización UX/UI para la máxima conversión.", "Mockups interactivos para tu validación."],
+        image: "https://images.unsplash.com/photo-1560472354-b33ff08c84a4?q=80&w=2814&auto=format&fit=crop",
+        link: "#"
     },
-    { 
-        icon: <HeartHandshakeIcon />, 
-        title: "Centro de Integraciones",
-        uppercaseTitle: "CENTRO DE INTEGRACIONES",
-        headingMain: "Conecta Todo tu ",
-        headingGradient: "Ecosistema de Marketing",
-        description: "Automatiza tu flujo de trabajo conectando VANLANDINGS a las herramientas que ya usas y te encantan.", 
-        details: ["Envía prospectos sin problemas a tu CRM o plataforma de email.", "Funciona con Zapier, Hubspot, Mailchimp y más."], 
-        image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2938&auto=format&fit=crop", 
-        link: "#" 
+    {
+        icon: <HeartHandshakeIcon />,
+        title: "Socio de Crecimiento",
+        uppercaseTitle: "TU ÉXITO ES EL NUESTRO",
+        headingMain: "No te Dejamos Solo ",
+        headingGradient: "Tras el Lanzamiento",
+        description: "No te entregamos una web y desaparecemos. Ofrecemos un acompañamiento constante y mejoras proactivas para asegurar que tu landing page evolucione con tu negocio y el mercado, manteniéndose siempre relevante y optimizada.",
+        details: ["Monitorización de rendimiento y seguridad.", "Propuestas proactivas de mejora y optimización.", "Un socio tecnológico a largo plazo para tu negocio."],
+        image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2938&auto=format&fit=crop",
+        link: "#"
     },
-    { 
-        icon: <FileTextIcon />, 
-        title: "Motor de Rendimiento",
-        uppercaseTitle: "MOTOR DE RENDIMIENTO",
-        headingMain: "Páginas Ultrarrápidas, ",
-        headingGradient: "Garantizado",
-        description: "Las páginas lentas matan las conversiones. Nuestra plataforma está construida para la velocidad, asegurando que tus páginas de aterrizaje estén optimizadas para las Core Web Vitals.", 
-        details: ["Logra las mejores puntuaciones de rendimiento desde el primer momento.", "Un mejor rendimiento significa un mejor SEO y menores costos de publicidad."], 
-        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2940&auto=format&fit=crop", 
-        link: "#" 
-    },
-    { 
-        icon: <FileSearchIcon />, 
-        title: "Kit de Herramientas SEO",
-        uppercaseTitle: "KIT DE HERRAMIENTAS SEO",
-        headingMain: "Escala Posiciones ",
-        headingGradient: "en Google",
-        description: "Atrae más tráfico orgánico. VANLANDINGS incluye herramientas integradas para ayudar a que tus páginas de aterrizaje se posicionen mejor en los resultados de búsqueda.", 
-        details: ["La IA sugiere palabras clave y optimiza el contenido para la búsqueda.", "Generación automática de sitemaps y marcado de schema."], 
-        image: "https://images.unsplash.com/photo-1543286386-713bdd548da4?q=80&w=2940&auto=format&fit=crop", 
-        link: "#" 
+    {
+        icon: <FileTextIcon />,
+        title: "Inversión Inteligente",
+        uppercaseTitle: "VALOR SIN COMPROMISO",
+        headingMain: "Tecnología de Punta, ",
+        headingGradient: "Precio Accesible",
+        description: "Accede a tecnología de punta y expertise humano sin los costos desorbitados de una agencia tradicional. Tu inversión se traduce directamente en un activo digital de alto rendimiento que genera un ROI claro y medible.",
+        details: ["Precios transparentes y accesibles.", "Alto ROI garantizado.", "Sin costos ocultos ni sorpresas."],
+        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2940&auto=format&fit=crop",
+        link: "#"
     },
 ];
 
