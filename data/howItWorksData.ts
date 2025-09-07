@@ -23,8 +23,8 @@ export const steps = [
     gradient: 'to-categorical-orange-light',
     displayType: 'video',
     displayData: {
-      src: 'https://videos.pexels.com/video-files/853828/853828-hd_1920_1080_25fps.mp4',
-      poster: 'https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+      src: 'https://videos.pexels.com/video-files/6058627/6058627-hd_1920_1080_25fps.mp4',
+      poster: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=2940&auto=format&fit=crop'
     },
     enabled: true,
   },
