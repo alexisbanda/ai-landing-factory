@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 
 // Custom hook for animating number counting
@@ -111,20 +112,17 @@ const TrendChart: React.FC<{ data: number[] }> = ({ data }) => {
     const [pathLength, setPathLength] = useState(0);
 
     useEffect(() => {
-        // Defer the calculation to the next event loop cycle to ensure the SVG element is rendered.
         const timer = setTimeout(() => {
-            if (pathRef.current) {
+            if (pathRef.current && pathRef.current.getBBox().width > 0) { // Check if rendered
                 try {
                     setPathLength(pathRef.current.getTotalLength());
                 } catch (e) {
-                    // This can happen in rare cases if the element is still not rendered.
-                    // The animation might not play, but the app won't crash.
                     console.error("Failed to get SVG path length:", e);
                 }
             }
-        }, 0); // A 0ms timeout is usually sufficient to push it past the current render cycle.
+        }, 100); // Increased timeout to allow for parent animations
 
-        return () => clearTimeout(timer); // Clean up on unmount.
+        return () => clearTimeout(timer);
     }, [points]);
 
     return (

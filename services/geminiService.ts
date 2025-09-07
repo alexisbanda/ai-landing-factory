@@ -1,4 +1,3 @@
-import { GoogleGenAI, Type } from "@google/genai";
 import { FaqItem } from '../types';
 
 // Static data is kept as a reliable fallback and for when the API is disabled.
@@ -11,6 +10,7 @@ const staticFaqData: FaqItem[] = [
   { question: "¿Las páginas son rápidas y están optimizadas para SEO?", answer: "Absolutamente. La velocidad es una de nuestras principales prioridades. Todas las páginas generadas con VANLANDINGS están optimizadas para las Core Web Vitals de Google y vienen con herramientas SEO integradas para ayudarte a posicionar mejor en los resultados de búsqueda." }
 ];
 
+// Re-exporting the interface for use in components
 export interface LandingConcept {
   headline: string;
   subheadline: string;
@@ -21,68 +21,33 @@ export interface LandingConcept {
   abTestSuggestion: { headline: string };
 }
 
-
 /**
  * Fetches the static, hardcoded FAQ data.
- * This is the default and recommended method to avoid API rate limits.
  */
 export const fetchStaticFaqData = async (): Promise<FaqItem[]> => {
   return Promise.resolve(staticFaqData);
 };
 
 /**
- * Fetches dynamic FAQ data from the Gemini API.
- * This can be enabled via the config in the Faq component.
+ * Fetches dynamic FAQ data by calling our secure Netlify Function.
  */
 export const fetchFaqFromGemini = async (): Promise<FaqItem[]> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
-    const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: `Generate 6 frequently asked questions and their answers in Spanish for a company called VANLANDINGS. It's an AI-powered platform that creates fast, low-cost, high-conversion landing pages for marketers, startups, and entrepreneurs. The platform features AI content generation, brand alignment, A/B testing, integrations, and is optimized for speed and SEO. Ensure the answer for 'What is VANLANDINGS?' includes a mention that it generates pages in minutes, not weeks.`,
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: Type.ARRAY,
-            items: {
-              type: Type.OBJECT,
-              properties: {
-                question: {
-                  type: Type.STRING,
-                  description: 'The frequently asked question.',
-                },
-                answer: {
-                  type: Type.STRING,
-                  description: 'The answer to the question.',
-                },
-              },
-              required: ["question", "answer"],
-            },
-          },
-       },
-    });
-
-    const jsonStr = response.text.trim();
-    if (!jsonStr) {
-      throw new Error("API returned an empty response.");
+    const response = await fetch('/.netlify/functions/generateFaq');
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Error: ${response.statusText}`);
     }
-
-    const data = JSON.parse(jsonStr);
+    const data = await response.json();
     return data as FaqItem[];
-
   } catch (error) {
-    console.error("Error fetching data from Gemini API:", error);
-    // Re-throw a more specific error for the UI component to catch
-    if (error instanceof Error && error.message.includes('quota')) {
-        throw new Error('You exceeded your current quota, please check your plan and billing details.');
-    }
-    throw new Error('Failed to fetch dynamic FAQ data.');
+    console.error("Error fetching from Netlify function:", error);
+    throw new Error(`Failed to fetch dynamic FAQ data: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 };
 
 /**
- * Generates a landing page concept using the Gemini API based on user inputs.
+ * Generates a landing page concept by calling our secure Netlify Function.
  */
 export const generateLandingConcept = async (
   description: string,
@@ -91,85 +56,56 @@ export const generateLandingConcept = async (
   tone: string
 ): Promise<LandingConcept> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
-    const prompt = `Actúa como un experto en marketing de conversión y estratega de UX/UI de clase mundial. Un usuario quiere crear una landing page. A continuación se detallan sus necesidades:
-      - Descripción del producto/servicio: "${description}"
-      - Público objetivo: "${audience}"
-      - Objetivo principal de la página: "${goal}"
-      - Tono de la comunicación: "${tone}"
-
-      Basado en esta información, genera una "Hoja de Ruta Estratégica" completa para su landing page en español. La respuesta debe ser un objeto JSON con la siguiente estructura:
-      1.  "headline": Un titular potente y que llame la atención.
-      2.  "subheadline": Un subtítulo que complemente y amplíe el titular.
-      3.  "keyBenefits": Una lista de 3 puntos clave o beneficios que resalten el valor principal.
-      4.  "cta": El texto para un botón de llamada a la acción claro y persuasivo.
-      5.  "pageOutline": Un esquema sugerido para la estructura de la página, con 4-5 secciones (ej: Hero, Problema, Beneficios, Prueba Social, CTA Final). Cada sección debe tener un nombre ("section") y una breve descripción ("description").
-      6.  "imageSuggestions": Dos sugerencias de imágenes o visuales clave (ej: para el Hero y la sección de Beneficios). Cada sugerencia debe tener una sección ("section") y la propia sugerencia ("suggestion").
-      7.  "abTestSuggestion": Una sugerencia para una prueba A/B, específicamente un titular alternativo ("headline").`;
-
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            headline: { type: Type.STRING, description: 'El titular principal.' },
-            subheadline: { type: Type.STRING, description: 'El subtítulo de apoyo.' },
-            keyBenefits: { type: Type.ARRAY, items: { type: Type.STRING }, description: 'Lista de 3 beneficios.' },
-            cta: { type: Type.STRING, description: 'Texto del botón CTA.' },
-            pageOutline: {
-              type: Type.ARRAY,
-              description: 'Esquema de las secciones de la página.',
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  section: { type: Type.STRING, description: 'Nombre de la sección.' },
-                  description: { type: Type.STRING, description: 'Descripción de la sección.' },
-                },
-                required: ["section", "description"],
-              },
-            },
-            imageSuggestions: {
-              type: Type.ARRAY,
-              description: 'Sugerencias de imágenes.',
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  section: { type: Type.STRING, description: 'Sección para la imagen.' },
-                  suggestion: { type: Type.STRING, description: 'Sugerencia de imagen.' },
-                },
-                required: ["section", "suggestion"],
-              },
-            },
-            abTestSuggestion: {
-              type: Type.OBJECT,
-              description: 'Sugerencia para prueba A/B.',
-              properties: {
-                headline: { type: Type.STRING, description: 'Titular alternativo.' },
-              },
-              required: ["headline"],
-            },
-          },
-          required: ["headline", "subheadline", "keyBenefits", "cta", "pageOutline", "imageSuggestions", "abTestSuggestion"],
-        },
+    const response = await fetch('/.netlify/functions/generateConcept', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ description, audience, goal, tone }),
     });
 
-    const jsonStr = response.text.trim();
-    if (!jsonStr) {
-      throw new Error("La API devolvió una respuesta vacía.");
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Error: ${response.statusText}`);
     }
-    
-    const data = JSON.parse(jsonStr);
+
+    const data = await response.json();
     return data as LandingConcept;
   } catch (error) {
-    console.error("Error al generar el concepto de landing page con la API de Gemini:", error);
-     if (error instanceof Error && error.message.includes('quota')) {
-        throw new Error('Has excedido tu cuota actual. Por favor, revisa tu plan y detalles de facturación.');
+    console.error("Error fetching from Netlify function:", error);
+    throw new Error(`No se pudo generar el concepto: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+};
+
+/**
+ * Regenerates just the headline by calling a dedicated Netlify Function.
+ */
+export const regenerateHeadline = async (
+  description: string,
+  audience: string,
+  goal: string,
+  tone: string,
+  currentHeadline: string
+): Promise<{ headline: string }> => {
+  try {
+    const response = await fetch('/.netlify/functions/regenerateHeadline', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ description, audience, goal, tone, currentHeadline }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Error: ${response.statusText}`);
     }
-    throw new Error('No se pudo generar el concepto de la landing page.');
+
+    const data = await response.json();
+    return data as { headline: string };
+
+  } catch (error) {
+    console.error("Error fetching from Netlify function:", error);
+    throw new Error(`No se pudo regenerar el titular: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 };

@@ -1,41 +1,87 @@
+
 import React, { useState } from 'react';
-import { generateLandingConcept, LandingConcept } from '../services/geminiService';
-import { SparklesIcon, LoaderIcon, CheckIcon, FileTextIcon, ArrowLeftRightIcon } from './icons/Icons';
+import { generateLandingConcept, regenerateHeadline, LandingConcept } from '../services/geminiService';
+import { SparklesIcon, LoaderIcon, CheckIcon, FileTextIcon, ArrowLeftRightIcon, RefreshCwIcon } from './icons/Icons';
 
 type Step = 1 | 2 | 3;
-type Audience = "Emprendedores" | "Marketers" | "Desarrolladores" | "Público General";
-type Goal = "Generar Leads" | "Vender un Producto" | "Obtener Registros" | "Anunciar un Evento";
-type Tone = "Profesional" | "Amistoso" | "Urgente" | "Inspirador";
+type Audience = "Emprendedores" | "Marketers" | "Desarrolladores" | "Público General" | "Otro...";
+type Goal = "Generar Leads" | "Vender un Producto" | "Obtener Registros" | "Anunciar un Evento" | "Otro...";
+type Tone = "Profesional" | "Amistoso" | "Urgente" | "Inspirador" | "Otro...";
 
-
-const audiences: Audience[] = ["Emprendedores", "Marketers", "Desarrolladores", "Público General"];
-const goals: Goal[] = ["Generar Leads", "Vender un Producto", "Obtener Registros", "Anunciar un Evento"];
-const tones: Tone[] = ["Profesional", "Amistoso", "Urgente", "Inspirador"];
-
+const audiences: Audience[] = ["Emprendedores", "Marketers", "Desarrolladores", "Público General", "Otro..."];
+const goals: Goal[] = ["Generar Leads", "Vender un Producto", "Obtener Registros", "Anunciar un Evento", "Otro..."];
+const tones: Tone[] = ["Profesional", "Amistoso", "Urgente", "Inspirador", "Otro..."];
 
 const AIConceptGenerator: React.FC = () => {
     const [currentStep, setCurrentStep] = useState<Step>(1);
-    const [description, setDescription] = useState('');
+    const [productInfo, setProductInfo] = useState({ what: '', problem: '', features: '' });
+    
     const [selectedAudience, setSelectedAudience] = useState<Audience>('Marketers');
     const [selectedGoal, setSelectedGoal] = useState<Goal>('Generar Leads');
     const [selectedTone, setSelectedTone] = useState<Tone>('Profesional');
+
+    const [customAudience, setCustomAudience] = useState('');
+    const [customGoal, setCustomGoal] = useState('');
+    const [customTone, setCustomTone] = useState('');
+
     const [isLoading, setIsLoading] = useState(false);
+    const [isRegenerating, setIsRegenerating] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [result, setResult] = useState<LandingConcept | null>(null);
     const [leadEmail, setLeadEmail] = useState('');
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setProductInfo(prev => ({ ...prev, [name]: value }));
+    };
+
+    const getFinalInputs = () => {
+        const finalAudience = selectedAudience === 'Otro...' ? customAudience : selectedAudience;
+        const finalGoal = selectedGoal === 'Otro...' ? customGoal : selectedGoal;
+        const finalTone = selectedTone === 'Otro...' ? customTone : selectedTone;
+        return { finalAudience, finalGoal, finalTone };
+    }
 
     const handleGenerateConcept = async () => {
         setIsLoading(true);
         setError(null);
         setResult(null);
         setCurrentStep(3);
+
+        const { finalAudience, finalGoal, finalTone } = getFinalInputs();
+
+        if (!finalAudience.trim() || !finalGoal.trim() || !finalTone.trim()) {
+            setError("Por favor, completa los campos personalizados.");
+            setIsLoading(false);
+            setCurrentStep(2);
+            return;
+        }
+
         try {
-            const concept = await generateLandingConcept(description, selectedAudience, selectedGoal, selectedTone);
+            const fullDescription = `Producto: ${productInfo.what}. Problema que resuelve: ${productInfo.problem}. Características clave: ${productInfo.features}.`;
+            const concept = await generateLandingConcept(fullDescription, finalAudience, finalGoal, finalTone);
             setResult(concept);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Ocurrió un error desconocido.');
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleRegenerateHeadline = async () => {
+        if (!result) return;
+        setIsRegenerating(true);
+        const { finalAudience, finalGoal, finalTone } = getFinalInputs();
+        const fullDescription = `Producto: ${productInfo.what}. Problema que resuelve: ${productInfo.problem}. Características clave: ${productInfo.features}.`;
+        
+        try {
+            const newHeadlineData = await regenerateHeadline(fullDescription, finalAudience, finalGoal, finalTone, result.headline);
+            setResult(prevResult => prevResult ? { ...prevResult, headline: newHeadlineData.headline } : null);
+        } catch (err) {
+            // Optionally set a small error message next to the button
+            console.error("Failed to regenerate headline");
+        } finally {
+            setIsRegenerating(false);
         }
     };
 
@@ -72,18 +118,52 @@ const AIConceptGenerator: React.FC = () => {
 
                     <div className="flex-grow flex flex-col justify-center mt-6">
                         {currentStep === 1 && (
-                            <div className="animate-fade-in-up space-y-4">
-                                <label htmlFor="description" className="block text-xl font-bold text-cleat-dark text-center">¿Qué producto, servicio u oferta quieres promocionar?</label>
-                                <textarea
-                                    id="description"
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    placeholder="Ej: Una app de yoga para principiantes con clases en vivo y seguimiento personalizado."
-                                    className="w-full h-32 p-3 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                                />
+                            <div className="animate-fade-in-up space-y-6">
+                                <div className="text-center">
+                                     <h2 className="text-xl font-bold text-cleat-dark">Cuéntanos sobre tu idea</h2>
+                                     <p className="text-sm text-slate-500">Sé específico para obtener los mejores resultados.</p>
+                                </div>
+                                <div className="space-y-4">
+                                    <div>
+                                        <label htmlFor="what" className="block text-sm font-semibold text-slate-700 mb-1">1. ¿Qué producto, servicio u oferta quieres promocionar?</label>
+                                        <input
+                                            type="text"
+                                            id="what"
+                                            name="what"
+                                            value={productInfo.what}
+                                            onChange={handleInputChange}
+                                            placeholder="Ej: Una app de yoga para principiantes"
+                                            className="w-full p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="problem" className="block text-sm font-semibold text-slate-700 mb-1">2. ¿Cuál es el principal problema que resuelve?</label>
+                                        <input
+                                            type="text"
+                                            id="problem"
+                                            name="problem"
+                                            value={productInfo.problem}
+                                            onChange={handleInputChange}
+                                            placeholder="Ej: Ayuda a la gente a empezar a hacer ejercicio sin sentirse intimidada"
+                                            className="w-full p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="features" className="block text-sm font-semibold text-slate-700 mb-1">3. Menciona 1 o 2 características clave (opcional)</label>
+                                        <input
+                                            type="text"
+                                            id="features"
+                                            name="features"
+                                            value={productInfo.features}
+                                            onChange={handleInputChange}
+                                            placeholder="Ej: Clases en vivo y seguimiento personalizado"
+                                            className="w-full p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                                        />
+                                    </div>
+                                </div>
                                 <button
                                     onClick={() => setCurrentStep(2)}
-                                    disabled={!description.trim()}
+                                    disabled={!productInfo.what.trim() || !productInfo.problem.trim()}
                                     className="w-full sm:w-auto float-right bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition-all disabled:bg-slate-400 disabled:cursor-not-allowed"
                                 >
                                     Siguiente
@@ -91,30 +171,33 @@ const AIConceptGenerator: React.FC = () => {
                             </div>
                         )}
                         {currentStep === 2 && (
-                             <div className="animate-fade-in-up space-y-5">
-                                <div>
-                                    <h3 className="text-lg font-bold text-cleat-dark text-center mb-3">¿Quién es tu público objetivo?</h3>
-                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                             <div className="animate-fade-in-up space-y-4">
+                                <div className="space-y-2">
+                                    <h3 className="text-lg font-bold text-cleat-dark text-center">¿Quién es tu público objetivo?</h3>
+                                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                                         {audiences.map(audience => (
-                                            <button key={audience} onClick={() => setSelectedAudience(audience)} className={`p-3 border rounded-lg font-semibold transition-all text-sm ${selectedAudience === audience ? 'bg-primary text-white ring-2 ring-primary/50' : 'bg-slate-50 hover:bg-slate-100'}`}>{audience}</button>
+                                            <button key={audience} onClick={() => setSelectedAudience(audience)} className={`p-2 border rounded-lg font-semibold transition-all text-xs sm:text-sm ${selectedAudience === audience ? 'bg-primary text-white ring-2 ring-primary/50' : 'bg-slate-50 hover:bg-slate-100'}`}>{audience}</button>
                                         ))}
                                     </div>
+                                    {selectedAudience === 'Otro...' && <input type="text" value={customAudience} onChange={e => setCustomAudience(e.target.value)} placeholder="Define tu público" className="w-full mt-2 p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" />}
                                 </div>
-                                <div>
-                                    <h3 className="text-lg font-bold text-cleat-dark text-center mb-3">¿Cuál es el objetivo principal?</h3>
-                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                <div className="space-y-2">
+                                    <h3 className="text-lg font-bold text-cleat-dark text-center">¿Cuál es el objetivo principal?</h3>
+                                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                                         {goals.map(goal => (
-                                            <button key={goal} onClick={() => setSelectedGoal(goal)} className={`p-3 border rounded-lg font-semibold transition-all text-sm ${selectedGoal === goal ? 'bg-primary text-white ring-2 ring-primary/50' : 'bg-slate-50 hover:bg-slate-100'}`}>{goal}</button>
+                                            <button key={goal} onClick={() => setSelectedGoal(goal)} className={`p-2 border rounded-lg font-semibold transition-all text-xs sm:text-sm ${selectedGoal === goal ? 'bg-primary text-white ring-2 ring-primary/50' : 'bg-slate-50 hover:bg-slate-100'}`}>{goal}</button>
                                         ))}
                                     </div>
+                                    {selectedGoal === 'Otro...' && <input type="text" value={customGoal} onChange={e => setCustomGoal(e.target.value)} placeholder="Define tu objetivo" className="w-full mt-2 p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" />}
                                 </div>
-                                 <div>
-                                    <h3 className="text-lg font-bold text-cleat-dark text-center mb-3">¿Cuál es el tono de la comunicación?</h3>
-                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                 <div className="space-y-2">
+                                    <h3 className="text-lg font-bold text-cleat-dark text-center">¿Cuál es el tono de la comunicación?</h3>
+                                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                                         {tones.map(tone => (
-                                            <button key={tone} onClick={() => setSelectedTone(tone)} className={`p-3 border rounded-lg font-semibold transition-all text-sm ${selectedTone === tone ? 'bg-primary text-white ring-2 ring-primary/50' : 'bg-slate-50 hover:bg-slate-100'}`}>{tone}</button>
+                                            <button key={tone} onClick={() => setSelectedTone(tone)} className={`p-2 border rounded-lg font-semibold transition-all text-xs sm:text-sm ${selectedTone === tone ? 'bg-primary text-white ring-2 ring-primary/50' : 'bg-slate-50 hover:bg-slate-100'}`}>{tone}</button>
                                         ))}
                                     </div>
+                                    {selectedTone === 'Otro...' && <input type="text" value={customTone} onChange={e => setCustomTone(e.target.value)} placeholder="Define tu tono" className="w-full mt-2 p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" />}
                                 </div>
                                 <div className="flex justify-between pt-2">
                                     <button onClick={() => setCurrentStep(1)} className="bg-slate-200 text-slate-700 font-bold py-3 px-8 rounded-lg hover:bg-slate-300 transition-all">Anterior</button>
@@ -142,15 +225,21 @@ const AIConceptGenerator: React.FC = () => {
                                 )}
                                 {result && (
                                     <div className="space-y-6">
-                                        {/* Titular y Subtitulo */}
-                                        <div className="p-6 rounded-lg bg-slate-50 border border-slate-200 text-center">
+                                        <div className="relative p-6 rounded-lg bg-slate-50 border border-slate-200 text-center">
                                             <h3 className="text-sm font-bold uppercase text-primary tracking-wider mb-2">Titular y Subtítulo</h3>
                                             <p className="text-2xl font-bold text-cleat-dark">"{result.headline}"</p>
                                             <p className="text-slate-600 mt-2">{result.subheadline}</p>
+                                            <button 
+                                                onClick={handleRegenerateHeadline}
+                                                disabled={isRegenerating}
+                                                className="absolute top-2 right-2 p-1 text-slate-400 hover:text-primary rounded-full transition-colors disabled:cursor-not-allowed"
+                                                aria-label="Regenerar titular"
+                                            >
+                                                {isRegenerating ? <LoaderIcon className="h-4 w-4 animate-spin" /> : <RefreshCwIcon className="h-4 w-4" />}
+                                            </button>
                                         </div>
                                         
                                         <div className="grid md:grid-cols-2 gap-6">
-                                            {/* Beneficios y CTA */}
                                             <div className="space-y-4">
                                                 <div className="p-4 rounded-lg bg-slate-50 border border-slate-200">
                                                     <h3 className="text-sm font-bold uppercase text-primary tracking-wider mb-3">Beneficios Clave</h3>
@@ -176,7 +265,6 @@ const AIConceptGenerator: React.FC = () => {
                                                 </div>
                                             </div>
                                             
-                                            {/* Esquema e Imágenes */}
                                             <div className="space-y-4">
                                                 <div className="p-4 rounded-lg bg-slate-50 border border-slate-200">
                                                     <h3 className="flex items-center gap-2 text-sm font-bold uppercase text-primary tracking-wider mb-3">
@@ -206,7 +294,6 @@ const AIConceptGenerator: React.FC = () => {
                                             </div>
                                         </div>
 
-                                        {/* Lead Capture */}
                                         <div className="mt-6 text-center bg-green-50 border-t-4 border-green-400 p-4 rounded-b-lg">
                                             <h3 className="text-lg font-bold text-green-800">¡Tu Hoja de Ruta Estratégica está lista!</h3>
                                             <p className="text-green-700 mt-1 text-sm">Ingresa tu email para recibir el plan completo y empezar tu prueba gratuita.</p>
