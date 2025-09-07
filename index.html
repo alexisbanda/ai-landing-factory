@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -147,6 +146,19 @@
 </script>
 </head>
   <body>
+    <!-- Netlify Forms hidden form -->
+    <form name="concept-form" netlify netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="concept-form" />
+      <input type="email" name="email" />
+      <input type="hidden" name="headline" />
+      <input type="hidden" name="subheadline" />
+      <input type="hidden" name="keyBenefits" />
+      <input type="hidden" name="cta" />
+      <input type="hidden" name="pageOutline" />
+      <input type="hidden" name="abTestSuggestion" />
+      <input type="hidden" name="aiComponentSuggestion" />
+    </form>
+
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>
