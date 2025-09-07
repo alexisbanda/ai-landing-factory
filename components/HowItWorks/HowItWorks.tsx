@@ -250,9 +250,9 @@ const HowItWorks: React.FC = () => {
       <div className="relative z-10">
           <div className="mx-auto text-center">
               <h2 className="md:w-4/ mx-auto mb-2 text-2xl font-bold text-slate-800 md:mb-3 md:text-4xl xl:mb-4 xl:text-5xl">
-                  <span className="bg-gradient-to-r from-primary to-cleat-dark bg-clip-text text-transparent">Lanza tu Próxima Página en 8 Pasos</span>
+                  <span className="bg-gradient-to-r from-primary to-cleat-dark bg-clip-text text-transparent">Lanza tu próxima landing en minutos</span>
               </h2>
-              <h3 className="mx-auto md:w-4/5 lg:w-3/5 xl:w-[75%] text-gray-600">Un flujo de trabajo simple y potente para pasar de la idea a una página publicada en minutos.</h3>
+              <h3 className="mx-auto md:w-4/5 lg:w-3/5 xl:w-[75%] text-gray-600">Un flujo optimizado que combina IA y estrategia humana para pasar de la idea a una página lista para convertir.</h3>
           </div>
           <div className="mb-12 mt-8 flex justify-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-gradient-to-r from-slate-50 to-blue-50 px-6 py-3 shadow-sm">

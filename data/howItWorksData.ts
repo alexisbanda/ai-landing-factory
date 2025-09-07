@@ -2,15 +2,15 @@ export const steps = [
   {
     icon: 'FileTextIcon',
     title: "Describe",
-    description: "Cuéntale a nuestra IA sobre tu oferta. Solo unas pocas frases es todo lo que necesita para comenzar a crear tu página de aterrizaje de alta conversión.",
+  description: "Dinos en 1–3 frases qué ofreces, a quién va dirigido y el beneficio clave. Con eso la IA genera la estructura, titulares y propuesta de valor listos para convertir.",
     colors: { bg: 'bg-categorical-blue-light', border: 'border-blue-200', text: 'text-categorical-blue-mid' },
     gradient: 'to-categorical-blue-light',
     displayType: 'typing-prompt',
     displayData: {
       prompts: [
-        "Un saas elegante para gestión de proyectos...",
-        "Una tienda online de cerámica artesanal...",
-        "Una página de aterrizaje para una nueva app de fitness..."
+        "SaaS para gestión de equipos: ahorro de tiempo para pymes, integración con Slack y facturación...",
+        "Tienda online de cerámica artesanal: productos únicos, envíos internacionales, público femenino 25-45...",
+        "App de fitness personalizada: planes por suscripción, planes adaptativos y seguimiento de progreso..."
       ]
     },
     enabled: true,
@@ -18,7 +18,7 @@ export const steps = [
   {
     icon: 'SparklesIcon',
     title: "Genera",
-    description: "Observa cómo la IA crea una página de aterrizaje completa (texto, diseño y maquetación) en menos de 60 segundos.",
+  description: "En segundos obtienes una landing estructurada: titulares orientados a beneficio, secciones para pruebas sociales y CTAs optimizados para convertir visitantes en leads.",
     colors: { bg: 'bg-categorical-green-light', border: 'border-green-200', text: 'text-categorical-green-mid' },
     gradient: 'to-categorical-green-light',
     displayType: 'video',
@@ -31,7 +31,7 @@ export const steps = [
   {
     icon: 'GavelIcon',
     title: "Personaliza",
-    description: "Usa nuestro editor intuitivo de arrastrar y soltar para ajustar cada detalle a la perfección. No se requiere código.",
+  description: "Personaliza diseño y copy en nuestro editor visual: arrastra, reemplaza y publica en tiempo real. Mantén coherencia de marca sin tocar código.",
     colors: { bg: 'bg-categorical-violet-light', border: 'border-violet-200', text: 'text-categorical-violet-mid' },
     gradient: 'to-categorical-violet-light',
     displayType: 'ui-editor',
@@ -40,7 +40,7 @@ export const steps = [
   {
     icon: 'HeartHandshakeIcon',
     title: "Conecta",
-    description: "Integra tus formularios con tus herramientas de marketing y ventas favoritas para automatizar tu flujo de prospectos.",
+  description: "Conecta formularios, CRM y herramientas de email para automatizar la captura y nutrición de leads: integraciones nativas con HubSpot, Mailchimp y Zapier.",
     colors: { bg: 'bg-categorical-orange-light', border: 'border-orange-200', text: 'text-categorical-orange-mid' },
     gradient: 'to-categorical-orange-light',
     displayType: 'integration-logos',
@@ -59,7 +59,7 @@ export const steps = [
   {
     icon: 'TrophyIcon',
     title: "Lanza",
-    description: "Publica tu página en un dominio personalizado con un solo clic y comienza a convertir visitantes en clientes.",
+  description: "Publica en tu dominio en un clic (DNS guiado), con SSL y tracking configurado: mide conversiones y empieza a optimizar desde el primer día.",
     colors: { bg: 'bg-categorical-cyan-light', border: 'border-cyan-200', text: 'text-categorical-cyan-mid' },
     gradient: 'to-categorical-cyan-light',
     displayType: 'launch-dashboard',
@@ -76,7 +76,7 @@ export const steps = [
   {
     icon: 'FileSearchIcon',
     title: "Optimiza",
-    description: "Deja que la IA pruebe automáticamente diferentes titulares e imágenes para encontrar la variante que maximiza tus conversiones.",
+  description: "Lanza tests A/B automáticos: la IA prueba variantes de titulares, imágenes y CTAs, y recomienda la versión ganadora con métricas claras.",
     colors: { bg: 'bg-categorical-blue-light', border: 'border-blue-200', text: 'text-categorical-blue-mid' },
     gradient: 'to-categorical-blue-light',
     displayType: 'ab-testing',
@@ -85,7 +85,7 @@ export const steps = [
   {
     icon: 'ArrowLeftRightIcon',
     title: "Identifica",
-    description: "Nuestra IA analiza tu sitio web para extraer tu logo, colores y tipografías, aplicando tu identidad de marca al instante.",
+  description: "Escanea tu web o subida de activos para extraer logo, paleta y tipografías; generamos tres opciones de diseño alineadas a tu marca.",
     colors: { bg: 'bg-categorical-green-light', border: 'border-green-200', text: 'text-categorical-green-mid' },
     gradient: 'to-categorical-green-light',
     displayType: 'brand-scanner',
@@ -94,7 +94,7 @@ export const steps = [
   {
     icon: 'SparklesIcon',
     title: "Ilustra",
-    description: "Genera imágenes e iconos únicos y libres de derechos de autor a partir de una simple descripción de texto, directamente en el editor.",
+  description: "Genera imágenes e iconos a partir de un prompt—variantes optimizadas por formato (hero, thumbnail, social) y libres de problemas de licencia.",
     colors: { bg: 'bg-categorical-violet-light', border: 'border-violet-200', text: 'text-categorical-violet-mid' },
     gradient: 'to-categorical-violet-light',
     displayType: 'image-generation',

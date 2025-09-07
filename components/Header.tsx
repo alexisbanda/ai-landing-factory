@@ -10,8 +10,8 @@ const headerConfig = {
   glassmorphismOnScroll: true,
   sophisticatedHovers: true,
   advancedMenuAnimation: true,
-  showWatchDemoButton: true,
-  showGetStartedButton: true,
+  showWatchDemoButton: false,
+  showGetStartedButton: false,
   showLoginButton: true,
 };
 
