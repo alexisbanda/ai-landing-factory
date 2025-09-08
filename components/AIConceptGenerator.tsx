@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { generateLandingConcept, regenerateHeadline, LandingConcept } from '../services/geminiService';
-import { SparklesIcon, LoaderIcon, CheckIcon, FileTextIcon, ArrowLeftRightIcon, RefreshCwIcon, MessageCircleQuestionIcon, BotMessageSquareIcon, ClipboardPenIcon } from './icons/Icons';
+import { SparklesIcon, LoaderIcon, CheckIcon, FileTextIcon, ArrowLeftRightIcon, RefreshCwIcon, MessageCircleQuestionIcon, BotMessageSquareIcon, ClipboardPenIcon, ArrowLeftIcon, ClipboardIcon } from './icons/Icons';
 
 // Updated to a 4-step process
 type Step = 1 | 2 | 3 | 4;
@@ -22,6 +22,46 @@ const aiComponents: { name: AiComponentType; description: string; icon: React.FC
     { name: "Quiz Interactivo", description: "Un quiz que guía y califica a tus visitantes.", icon: ClipboardPenIcon },
 ];
 
+const loadingMessages = [
+    "Analizando tu producto...",
+    "Identificando a tu audiencia...",
+    "Consultando modelos de lenguaje avanzados...",
+    "Escribiendo un titular impactante...",
+    "Diseñando la estructura de conversión...",
+    "Generando ideas para pruebas A/B...",
+    "Casi listo, puliendo los detalles..."
+];
+
+const Tooltip = ({ content, children }: { content: string, children: React.ReactNode }) => {
+    return (
+        <div className="relative flex items-center group">
+            {children}
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-cleat-dark text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                {content}
+            </div>
+        </div>
+    );
+};
+
+const CopyButton = ({ textToCopy }: { textToCopy: string }) => {
+    const [isCopied, setIsCopied] = useState(false);
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+        });
+    };
+
+    return (
+        <button onClick={handleCopy} className="p-1.5 text-slate-400 hover:text-primary rounded-full transition-colors disabled:cursor-not-allowed" aria-label="Copiar al portapapeles">
+            {isCopied ? <CheckIcon className="h-4 w-4 text-status-success" /> : <ClipboardIcon className="h-4 w-4" />}
+        </button>
+    );
+};
+
 const AIConceptGenerator: React.FC = () => {
     const [currentStep, setCurrentStep] = useState<Step>(1);
     const [productInfo, setProductInfo] = useState({ what: '', problem: '', features: '' });
@@ -37,6 +77,20 @@ const AIConceptGenerator: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [result, setResult] = useState<LandingConcept | null>(null);
     const [leadEmail, setLeadEmail] = useState('');
+    const [loadingMessage, setLoadingMessage] = useState(loadingMessages[0]);
+
+    useEffect(() => {
+        if (isLoading) {
+            let messageIndex = 0;
+            setLoadingMessage(loadingMessages[0]); // Reset to first message
+            const interval = setInterval(() => {
+                messageIndex = (messageIndex + 1) % loadingMessages.length;
+                setLoadingMessage(loadingMessages[messageIndex]);
+            }, 2000); // Change message every 2 seconds
+
+            return () => clearInterval(interval);
+        }
+    }, [isLoading]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -184,7 +238,12 @@ const AIConceptGenerator: React.FC = () => {
                         {currentStep === 3 && (
                              <div className="animate-fade-in-up space-y-4">
                                 <div className="space-y-2">
-                                    <h3 className="text-lg font-bold text-cleat-dark text-center">¿Quién es tu público objetivo?</h3>
+                                    <div className="flex justify-center items-center gap-2">
+                                        <h3 className="text-lg font-bold text-cleat-dark">¿Quién es tu público objetivo?</h3>
+                                        <Tooltip content="La audiencia define el lenguaje y el enfoque. Un tono para 'Desarrolladores' será más técnico que para 'Público General'.">
+                                            <MessageCircleQuestionIcon className="h-4 w-4 text-slate-400 cursor-help" />
+                                        </Tooltip>
+                                    </div>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                                         {audiences.map(audience => (
                                             <button key={audience} onClick={() => setSelectedAudience(audience)} className={`p-2 border rounded-lg font-semibold transition-all text-xs sm:text-sm ${selectedAudience === audience ? 'bg-primary text-white ring-2 ring-primary/50' : 'bg-slate-50 hover:bg-slate-100'}`}>{audience}</button>
@@ -193,7 +252,12 @@ const AIConceptGenerator: React.FC = () => {
                                     {selectedAudience === 'Otro...' && <input type="text" value={customAudience} onChange={e => setCustomAudience(e.target.value)} placeholder="Define tu público" className="w-full mt-2 p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" />}
                                 </div>
                                 <div className="space-y-2">
-                                    <h3 className="text-lg font-bold text-cleat-dark text-center">¿Cuál es el objetivo principal?</h3>
+                                    <div className="flex justify-center items-center gap-2">
+                                        <h3 className="text-lg font-bold text-cleat-dark">¿Cuál es el objetivo principal?</h3>
+                                        <Tooltip content="El objetivo principal determina las llamadas a la acción (CTA) y el contenido. 'Vender un Producto' se enfocará en características y beneficios, mientras que 'Generar Leads' podría ofrecer un ebook o un webinar.">
+                                            <MessageCircleQuestionIcon className="h-4 w-4 text-slate-400 cursor-help" />
+                                        </Tooltip>
+                                    </div>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                                         {goals.map(goal => (
                                             <button key={goal} onClick={() => setSelectedGoal(goal)} className={`p-2 border rounded-lg font-semibold transition-all text-xs sm:text-sm ${selectedGoal === goal ? 'bg-primary text-white ring-2 ring-primary/50' : 'bg-slate-50 hover:bg-slate-100'}`}>{goal}</button>
@@ -202,7 +266,12 @@ const AIConceptGenerator: React.FC = () => {
                                     {selectedGoal === 'Otro...' && <input type="text" value={customGoal} onChange={e => setCustomGoal(e.target.value)} placeholder="Define tu objetivo" className="w-full mt-2 p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" />}
                                 </div>
                                  <div className="space-y-2">
-                                    <h3 className="text-lg font-bold text-cleat-dark text-center">¿Cuál es el tono de la comunicación?</h3>
+                                    <div className="flex justify-center items-center gap-2">
+                                        <h3 className="text-lg font-bold text-cleat-dark">¿Cuál es el tono de la comunicación?</h3>
+                                        <Tooltip content="El tono ajusta la personalidad de la marca. 'Amistoso' usará un lenguaje más cercano y conversacional, mientras que 'Urgente' creará un sentido de escasez o tiempo limitado.">
+                                            <MessageCircleQuestionIcon className="h-4 w-4 text-slate-400 cursor-help" />
+                                        </Tooltip>
+                                    </div>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                                         {tones.map(tone => (
                                             <button key={tone} onClick={() => setSelectedTone(tone)} className={`p-2 border rounded-lg font-semibold transition-all text-xs sm:text-sm ${selectedTone === tone ? 'bg-primary text-white ring-2 ring-primary/50' : 'bg-slate-50 hover:bg-slate-100'}`}>{tone}</button>
@@ -224,7 +293,7 @@ const AIConceptGenerator: React.FC = () => {
                                 {isLoading && (
                                     <div className="flex flex-col items-center gap-4 text-primary text-center">
                                         <LoaderIcon className="h-12 w-12 animate-spin" />
-                                        <p className="text-xl font-semibold text-cleat-dark">Nuestra IA está diseñando tu estrategia...</p>
+                                        <p className="text-xl font-semibold text-cleat-dark transition-opacity duration-300">{loadingMessage}</p>
                                     </div>
                                 )}
                                 {error && (
@@ -239,10 +308,13 @@ const AIConceptGenerator: React.FC = () => {
                                         <div className="relative p-6 rounded-lg bg-slate-50 border border-slate-200 text-center">
                                             <h3 className="text-sm font-bold uppercase text-primary tracking-wider mb-2">Titular y Subtítulo</h3>
                                             <p className="text-2xl font-bold text-cleat-dark">"{result.headline}"</p>
-                                            <p className="text-slate-600 mt-2">{result.subheadline}</p>
-                                            <button onClick={handleRegenerateHeadline} disabled={isRegenerating} className="absolute top-2 right-2 p-1 text-slate-400 hover:text-primary rounded-full transition-colors disabled:cursor-not-allowed" aria-label="Regenerar titular">
-                                                {isRegenerating ? <LoaderIcon className="h-4 w-4 animate-spin" /> : <RefreshCwIcon className="h-4 w-4" />}
-                                            </button>
+                                            <p className="slate-600 mt-2">{result.subheadline}</p>
+                                            <div className="absolute top-2 right-2 flex items-center gap-1">
+                                                <CopyButton textToCopy={`Titular: ${result.headline}\nSubtítulo: ${result.subheadline}`} />
+                                                <button onClick={handleRegenerateHeadline} disabled={isRegenerating} className="p-1.5 text-slate-400 hover:text-primary rounded-full transition-colors disabled:cursor-not-allowed" aria-label="Regenerar titular">
+                                                    {isRegenerating ? <LoaderIcon className="h-4 w-4 animate-spin" /> : <RefreshCwIcon className="h-4 w-4" />}
+                                                </button>
+                                            </div>
                                         </div>
 
                                         {result.aiComponentSuggestion && (
@@ -257,7 +329,10 @@ const AIConceptGenerator: React.FC = () => {
                                         <div className="grid md:grid-cols-2 gap-6">
                                             <div className="space-y-4">
                                                 <div className="p-4 rounded-lg bg-slate-50 border border-slate-200">
-                                                    <h3 className="text-sm font-bold uppercase text-primary tracking-wider mb-3">Beneficios Clave</h3>
+                                                    <div className="flex items-center justify-between mb-3">
+                                                        <h3 className="text-sm font-bold uppercase text-primary tracking-wider">Beneficios Clave</h3>
+                                                        <CopyButton textToCopy={result.keyBenefits.join('\n- ')} />
+                                                    </div>
                                                     <ul className="space-y-2">
                                                         {result.keyBenefits.map((benefit, i) => (
                                                             <li key={i} className="flex items-start gap-2">
@@ -269,13 +344,19 @@ const AIConceptGenerator: React.FC = () => {
                                                 </div>
                                                 <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 flex flex-col justify-center items-center">
                                                     <h3 className="text-sm font-bold uppercase text-primary tracking-wider mb-2">Llamada a la Acción (CTA)</h3>
-                                                    <div className="bg-primary text-white font-bold py-3 px-6 rounded-lg mt-2 text-sm">{result.cta}</div>
+                                                    <div className="flex items-center gap-2 mt-2">
+                                                        <div className="bg-primary text-white font-bold py-3 px-6 rounded-lg text-sm">{result.cta}</div>
+                                                        <CopyButton textToCopy={result.cta} />
+                                                    </div>
                                                 </div>
                                                 <div className="p-4 rounded-lg bg-slate-50/50 border border-dashed border-slate-300">
-                                                    <h3 className="flex items-center gap-2 text-sm font-bold uppercase text-primary tracking-wider mb-2">
-                                                        <ArrowLeftRightIcon className="h-4 w-4" />
-                                                        Idea para Prueba A/B
-                                                    </h3>
+                                                    <div className="flex items-center justify-between mb-2">
+                                                        <h3 className="flex items-center gap-2 text-sm font-bold uppercase text-primary tracking-wider">
+                                                            <ArrowLeftRightIcon className="h-4 w-4" />
+                                                            Idea para Prueba A/B
+                                                        </h3>
+                                                        <CopyButton textToCopy={result.abTestSuggestion.headline} />
+                                                    </div>
                                                     <p className="text-slate-600 text-sm italic">Prueba este titular alternativo: "{result.abTestSuggestion.headline}"</p>
                                                 </div>
                                             </div>
@@ -284,16 +365,23 @@ const AIConceptGenerator: React.FC = () => {
                                                 <div className="p-4 rounded-lg bg-slate-50 border border-slate-200">
                                                     <h3 className="flex items-center gap-2 text-sm font-bold uppercase text-primary tracking-wider mb-3">
                                                         <FileTextIcon className="h-4 w-4" />
-                                                        Esquema de la Página
+                                                        Esquema Visual de la Página
                                                     </h3>
-                                                    <ul className="space-y-2.5">
+                                                    <div className="mt-4 border-2 border-slate-200 rounded-lg p-3 bg-white space-y-2 shadow-inner">
                                                         {result.pageOutline.map((item, i) => (
-                                                            <li key={i}>
-                                                                <p className="font-semibold text-cleat-dark text-sm">{i+1}. {item.section}</p>
-                                                                <p className="text-xs text-slate-500 pl-5">{item.description}</p>
-                                                            </li>
+                                                            <div key={i} className="p-2 rounded bg-slate-100 border border-slate-200">
+                                                                <p className="font-semibold text-cleat-dark text-xs text-center">{item.section}</p>
+                                                                {item.section.toLowerCase().includes('hero') || item.section.toLowerCase().includes('cta') ? (
+                                                                    <div className="mt-1.5 h-8 w-3/4 mx-auto bg-slate-300 rounded-sm"></div>
+                                                                ) : (
+                                                                    <div className="mt-1.5 space-y-1">
+                                                                        <div className="h-2 w-full bg-slate-300 rounded-full"></div>
+                                                                        <div className="h-2 w-5/6 bg-slate-300 rounded-full"></div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                         ))}
-                                                    </ul>
+                                                    </div>
                                                 </div>
                                                  <div className="p-4 rounded-lg bg-slate-50 border border-slate-200">
                                                     <h3 className="text-sm font-bold uppercase text-primary tracking-wider mb-3">Sugerencias de Imágenes</h3>
@@ -307,6 +395,16 @@ const AIConceptGenerator: React.FC = () => {
                                                     </ul>
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        <div className="mt-6 pt-6 border-t border-slate-200 flex justify-center">
+                                            <button 
+                                                onClick={() => setCurrentStep(3)} 
+                                                className="bg-slate-100 text-slate-700 font-bold py-3 px-6 rounded-lg hover:bg-slate-200 transition-all flex items-center gap-2"
+                                            >
+                                                <ArrowLeftIcon className="h-5 w-5" />
+                                                Volver y Editar
+                                            </button>
                                         </div>
 
                                         {/* Lead Capture Form for Netlify */}
