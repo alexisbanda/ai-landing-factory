@@ -260,9 +260,9 @@ const Hero: React.FC<HeroProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
                 {t('hero.cta_free')}
                 <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-all duration-700 ease-in-out group-hover:left-[100%]" />
               </button>
-              <button onClick={onOpenDemoModal} className={`w-full sm:w-auto relative flex items-center justify-center rounded-full border-2 px-8 py-3 text-base font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] ${isDark ? 'border-neutral-200 bg-cleat-dark/50 text-neutral-100 hover:bg-neutral-100 hover:text-cleat-dark' : 'border-cleat-dark bg-transparent text-cleat-dark hover:bg-cleat-dark hover:text-white'}`}>
-                {t('hero.cta_demo')}
-              </button>
+              <a href="#ai-concept-generator" className={`w-full sm:w-auto relative flex items-center justify-center rounded-full border-2 px-8 py-3 text-base font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] ${isDark ? 'border-neutral-200 bg-cleat-dark/50 text-neutral-100 hover:bg-neutral-100 hover:text-cleat-dark' : 'border-cleat-dark bg-transparent text-cleat-dark hover:bg-cleat-dark hover:text-white'}`}>
+                Probar el Generador
+              </a>
             </div>
         )}
 

@@ -11,7 +11,7 @@ const headerConfig = {
   sophisticatedHovers: true,
   advancedMenuAnimation: true,
   showWatchDemoButton: true,
-  showGetStartedButton: true,
+  showGetStartedButton: false,
   showLoginButton: true,
 };
 
@@ -140,6 +140,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenDemoModal, onOpenSignUpModal }) =
           targetElement = featuresNavContainerRef.current;
       } else {
           switch (activeSection) {
+              
               case 'how-it-works':
                   targetElement = howItWorksNavRef.current;
                   break;
@@ -247,6 +248,17 @@ const Header: React.FC<HeaderProps> = ({ onOpenDemoModal, onOpenSignUpModal }) =
             </div>
           </div>
           
+          <a 
+            key="ai-concept-generator"
+            href="#ai-concept-generator" 
+            className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary bg-primary/10 rounded-full hover:bg-primary hover:text-white transition-all duration-300 transform hover:scale-105"
+          >
+            <SparklesIcon className="h-4 w-4" />
+            <span>
+              Generador IA
+            </span>
+          </a>
+
           <a 
             ref={howItWorksNavRef}
             onMouseEnter={() => handleNavHover(howItWorksNavRef.current)}
@@ -405,6 +417,10 @@ const Header: React.FC<HeaderProps> = ({ onOpenDemoModal, onOpenSignUpModal }) =
                     </div>
                 )}
               </div>
+              <a href="#ai-concept-generator" className="flex items-center justify-center gap-2 w-full text-center bg-primary text-white px-4 py-3 rounded-full text-sm font-semibold hover:bg-opacity-90 transition-all">
+                <SparklesIcon className="h-5 w-5" />
+                <span>Generador IA</span>
+              </a>
               <a href="#how-it-works" className="px-3 py-2 text-gray-700 hover:text-primary">Cómo Funciona</a>
               <a href="#showcase" className="px-3 py-2 text-gray-700 hover:text-primary">Galería</a>
               <a href="#testimonials" className="px-3 py-2 text-gray-700 hover:text-primary">Testimonios</a>
