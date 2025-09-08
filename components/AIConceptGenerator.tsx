@@ -92,22 +92,32 @@ const AIConceptGenerator: React.FC = () => {
         }
     };
 
-    const ProgressBar = () => (
-        <div className="w-full px-4 sm:px-8">
-            <div className="relative h-2 w-full rounded-full bg-slate-200">
-                <div 
-                    className="absolute top-0 left-0 h-2 rounded-full bg-primary transition-all duration-500 ease-out"
-                    style={{ width: `${((currentStep - 1) / 3) * 100}%` }} // Updated for 4 steps
-                />
+    const ProgressBar = () => {
+        const steps = ["Oferta", "Componente IA", "Detalles", "Concepto"];
+        const currentStepName = steps[currentStep - 1];
+
+        return (
+            <div className="w-full">
+                <div className="relative h-2 w-full rounded-full bg-slate-200">
+                    <div 
+                        className="absolute top-0 left-0 h-2 rounded-full bg-primary transition-all duration-500 ease-out"
+                        style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
+                    />
+                </div>
+                <div className="mt-2 hidden sm:grid grid-cols-4 text-center text-sm font-semibold text-slate-500">
+                    <span className={currentStep >= 1 ? 'text-primary' : ''}>Oferta</span>
+                    <span className={currentStep >= 2 ? 'text-primary' : ''}>Componente IA</span>
+                    <span className={currentStep >= 3 ? 'text-primary' : ''}>Detalles</span>
+                    <span className={currentStep >= 4 ? 'text-primary' : ''}>Concepto</span>
+                </div>
+                <div className="mt-3 text-center sm:hidden">
+                    <p className="text-sm font-semibold text-primary">
+                        Paso {currentStep} de 4: <span className="text-cleat-dark font-bold">{currentStepName}</span>
+                    </p>
+                </div>
             </div>
-            <div className="mt-2 grid grid-cols-4 text-center text-sm font-semibold text-slate-500">
-                <span className={currentStep >= 1 ? 'text-primary' : ''}>Oferta</span>
-                <span className={currentStep >= 2 ? 'text-primary' : ''}>Componente IA</span>
-                <span className={currentStep >= 3 ? 'text-primary' : ''}>Detalles</span>
-                <span className={currentStep >= 4 ? 'text-primary' : ''}>Concepto</span>
-            </div>
-        </div>
-    );
+        );
+    };
     
     return (
         <section id="ai-concept-generator" className="py-16 md:py-20 bg-slate-50/70">
@@ -121,7 +131,7 @@ const AIConceptGenerator: React.FC = () => {
                     </h3>
                 </div>
 
-                <div className="rounded-xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xl min-h-[500px] flex flex-col justify-between">
+                <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6 md:p-8 shadow-xl min-h-[500px] flex flex-col justify-between">
                     <ProgressBar />
 
                     <div className="flex-grow flex flex-col justify-center mt-6">
@@ -145,7 +155,9 @@ const AIConceptGenerator: React.FC = () => {
                                         <input type="text" id="features" name="features" value={productInfo.features} onChange={handleInputChange} placeholder="Ej: Clases en vivo y seguimiento personalizado" className="w-full p-2 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" />
                                     </div>
                                 </div>
-                                <button onClick={() => setCurrentStep(2)} disabled={!productInfo.what.trim() || !productInfo.problem.trim()} className="w-full sm:w-auto float-right bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition-all disabled:bg-slate-400 disabled:cursor-not-allowed">Siguiente</button>
+                                <div className="flex justify-end">
+                                    <button onClick={() => setCurrentStep(2)} disabled={!productInfo.what.trim() || !productInfo.problem.trim()} className="w-full sm:w-auto bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90 transition-all disabled:bg-slate-400 disabled:cursor-not-allowed">Siguiente</button>
+                                </div>
                             </div>
                         )}
                         {currentStep === 2 && (
@@ -173,7 +185,7 @@ const AIConceptGenerator: React.FC = () => {
                              <div className="animate-fade-in-up space-y-4">
                                 <div className="space-y-2">
                                     <h3 className="text-lg font-bold text-cleat-dark text-center">¿Quién es tu público objetivo?</h3>
-                                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                                         {audiences.map(audience => (
                                             <button key={audience} onClick={() => setSelectedAudience(audience)} className={`p-2 border rounded-lg font-semibold transition-all text-xs sm:text-sm ${selectedAudience === audience ? 'bg-primary text-white ring-2 ring-primary/50' : 'bg-slate-50 hover:bg-slate-100'}`}>{audience}</button>
                                         ))}
@@ -182,7 +194,7 @@ const AIConceptGenerator: React.FC = () => {
                                 </div>
                                 <div className="space-y-2">
                                     <h3 className="text-lg font-bold text-cleat-dark text-center">¿Cuál es el objetivo principal?</h3>
-                                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                                         {goals.map(goal => (
                                             <button key={goal} onClick={() => setSelectedGoal(goal)} className={`p-2 border rounded-lg font-semibold transition-all text-xs sm:text-sm ${selectedGoal === goal ? 'bg-primary text-white ring-2 ring-primary/50' : 'bg-slate-50 hover:bg-slate-100'}`}>{goal}</button>
                                         ))}
@@ -191,7 +203,7 @@ const AIConceptGenerator: React.FC = () => {
                                 </div>
                                  <div className="space-y-2">
                                     <h3 className="text-lg font-bold text-cleat-dark text-center">¿Cuál es el tono de la comunicación?</h3>
-                                    <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
                                         {tones.map(tone => (
                                             <button key={tone} onClick={() => setSelectedTone(tone)} className={`p-2 border rounded-lg font-semibold transition-all text-xs sm:text-sm ${selectedTone === tone ? 'bg-primary text-white ring-2 ring-primary/50' : 'bg-slate-50 hover:bg-slate-100'}`}>{tone}</button>
                                         ))}

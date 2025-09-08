@@ -242,7 +242,7 @@ const FeaturesTabs: React.FC = () => {
                                     role="tabpanel"
                                     data-state={activeTab === index ? 'active' : 'inactive'}
                                     className={`
-                                        col-start-1 row-start-1 w-full transition-opacity duration-500 data-[state=inactive]:opacity-0 data-[state=inactive]:pointer-events-none data-[state=active]:opacity-100 max-md:px-6
+                                        col-start-1 row-start-1 w-full transition-opacity duration-500 data-[state=inactive]:opacity-0 data-[state=inactive]:pointer-events-none data-[state=active]:opacity-100
                                         ${
                                             isVerticalLayout
                                             ? 'flex flex-col-reverse md:flex-row md:items-start' // Layout for Vertical (always two columns side-by-side)
@@ -254,43 +254,48 @@ const FeaturesTabs: React.FC = () => {
                                 >
                                     {/* Text content div */}
                                     <div className={`
-                                        flex flex-col items-center gap-3.5 md:items-start md:gap-6 md:py-8
+                                        flex flex-col items-center text-center md:text-left md:items-start gap-3.5 md:gap-6 md:py-8
                                         ${
                                             isVerticalLayout
                                             ? 'md:w-1/2 md:pr-12' // Vertical layout gets 50% width and padding
                                             : (isFullBleed 
-                                                ? 'max-md:px-6 md:col-start-1 md:flex md:justify-center md:items-center' // Horizontal full-bleed styling
-                                                : 'max-md:px-6 md:w-1/2' // Horizontal contained styling
+                                                ? 'px-6 md:col-start-1 md:flex md:justify-center md:items-center' // Horizontal full-bleed styling
+                                                : 'px-6 md:w-1/2' // Horizontal contained styling
                                             )
                                         }
                                     `}>
                                         <div className={`w-full ${!isVerticalLayout && isFullBleed ? 'max-w-lg' : ''}`}>
-                                            <div className="hidden flex-col md:flex">
-                                                <div className="mb-4 flex items-center gap-3">
+                                            {/* ===== UNIFIED RESPONSIVE HEADER ===== */}
+                                            <div className="flex flex-col gap-2 md:gap-4">
+                                                <div className="flex items-center gap-3">
                                                     <div className="flex items-center justify-center text-primary">{feature.icon}</div>
-                                                    <strong className="text-lg font-medium uppercase tracking-[0.5px] text-primary data-[state=active]:md:animate-fade-up">{feature.uppercaseTitle}</strong>
+                                                    <strong className="text-sm md:text-lg font-medium uppercase tracking-[0.5px] text-primary data-[state=active]:md:animate-fade-up">{feature.uppercaseTitle}</strong>
                                                 </div>
-                                                <div className="text-[48px] data-[state=active]:md:animate-fade-up" style={{ animationDelay: '0.25s' }}>
-                                                    <h4 className="font-semibold text-cleat-dark leading-normal">
+                                                <div className="text-3xl md:text-[48px] data-[state=active]:md:animate-fade-up" style={{ animationDelay: '0.25s' }}>
+                                                    <h4 className="font-semibold text-cleat-dark leading-tight md:leading-normal">
                                                         {feature.headingMain}
                                                         <span className="bg-gradient-to-r from-primary to-cleat-dark bg-clip-text text-transparent">{feature.headingGradient}</span>
                                                     </h4>
                                                 </div>
                                             </div>
-                                            <div className="text-base leading-relaxed text-slate-600">
+                                            {/* ===== END UNIFIED HEADER ===== */}
+
+                                            <div className="mt-4 text-base leading-relaxed text-slate-600">
                                                 <div className="mb-4 text-slate-600 data-[state=active]:md:animate-fade-up" style={{ animationDelay: '0.5s' }}>{feature.description}</div>
                                                 <div className="space-y-3">
                                                     {feature.details.map((detail, i) => (
-                                                        <div key={i} className="flex items-center gap-3 data-[state=active]:md:animate-fade-up" style={{ animationDelay: `${0.6 + i * 0.1}s` }}>
-                                                            <CheckIcon className="h-3.5 w-3.5 flex-shrink-0 text-status-success" />
+                                                        <div key={i} className="flex items-start text-left gap-3 data-[state=active]:md:animate-fade-up" style={{ animationDelay: `${0.6 + i * 0.1}s` }}>
+                                                            <CheckIcon className="h-3.5 w-3.5 flex-shrink-0 text-status-success mt-1" />
                                                             <span className="text-slate-600">{detail}</span>
                                                         </div>
                                                     ))}
                                                 </div>
                                             </div>
-                                            <button onClick={() => setIsModalOpen(true)} className="justify-center whitespace-nowrap shrink-0 inline-flex items-center gap-1 rounded-full border border-primary text-sm font-bold text-primary transition hover:scale-105 h-9 px-4 py-2 mt-6 md:mb-0 data-[state=active]:md:animate-fade-up" style={{ animationDelay: '0.85s' }}>
-                                                Saber Más <ArrowRightIcon className="h-4 w-4" />
-                                            </button>
+                                            <div className="mt-6 flex justify-center md:justify-start">
+                                                <button onClick={() => setIsModalOpen(true)} className="whitespace-nowrap shrink-0 inline-flex items-center gap-1 rounded-full border border-primary text-sm font-bold text-primary transition hover:scale-105 h-9 px-4 py-2 data-[state=active]:md:animate-fade-up" style={{ animationDelay: '0.85s' }}>
+                                                    Saber Más <ArrowRightIcon className="h-4 w-4" />
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     {/* Image content div */}
@@ -300,23 +305,12 @@ const FeaturesTabs: React.FC = () => {
                                             isVerticalLayout
                                             ? 'md:w-1/2 md:self-stretch' // Vertical layout gets 50% width and stretches
                                             : (isFullBleed 
-                                                ? 'max-md:px-6 md:col-start-2' // Horizontal full-bleed styling
-                                                : 'max-md:px-6 md:h-full md:w-1/2' // Horizontal contained styling
+                                                ? 'px-6 md:px-0 md:col-start-2' // Horizontal full-bleed styling
+                                                : 'px-6 md:px-0 md:h-full md:w-1/2' // Horizontal contained styling
                                             )
                                         }
                                     `}>
-                                        <div className="mb-6 flex flex-col gap-4 md:hidden md:gap-0">
-                                            <div className="flex items-center gap-3">
-                                                <div className="flex items-center justify-center text-primary">{feature.icon}</div>
-                                                <strong className="text-sm font-medium uppercase tracking-[0.5px] text-primary">{feature.uppercaseTitle}</strong>
-                                            </div>
-                                            <div className="text-[28px] leading-[32px] tracking-[-0.21px]">
-                                                <h4 className="font-semibold text-cleat-dark leading-normal">
-                                                    {feature.headingMain}
-                                                    <span className="bg-gradient-to-r from-primary to-cleat-dark bg-clip-text text-transparent">{feature.headingGradient}</span>
-                                                </h4>
-                                            </div>
-                                        </div>
+                                        {/* Mobile header was here, now removed */}
                                         <div className={`
                                             block w-full overflow-hidden aspect-video md:aspect-auto
                                             ${isFullBleed && isVerticalLayout

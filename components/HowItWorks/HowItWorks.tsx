@@ -38,7 +38,7 @@ const InactiveStepComponent = ({ step, index, onClick }: { step: typeof allSteps
     const IconComponent = iconComponents[step.icon as keyof typeof iconComponents];
     return (
     <div
-        className="group relative flex max-w-[88vw] cursor-pointer flex-col gap-3 rounded-lg px-3 transition-all duration-300 xl:hover:scale-105"
+        className="group relative flex cursor-pointer flex-col gap-3 rounded-lg px-3 transition-all duration-300 xl:hover:scale-105"
         style={{ height: '120px' }}
         onClick={onClick}
     >
@@ -94,7 +94,7 @@ const ActiveStep = ({ step, index, onNavigate, onMouseEnter, onMouseLeave, isPau
     
     return (
         <div 
-            className={`relative flex max-w-md flex-col gap-3 rounded-lg border border-slate-200 p-6 shadow-xl transition-all duration-300 ${config.useGradientBackground ? `bg-gradient-to-br from-white ${step.gradient}` : 'bg-white'} ${animClass('animate-card-pop-in')}`} 
+            className={`relative flex w-full max-w-md flex-col gap-3 rounded-lg border border-slate-200 p-4 md:p-6 shadow-xl transition-all duration-300 ${config.useGradientBackground ? `bg-gradient-to-br from-white ${step.gradient}` : 'bg-white'} ${animClass('animate-card-pop-in')}`} 
             style={{ height: '540px' }}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
@@ -116,20 +116,20 @@ const ActiveStep = ({ step, index, onNavigate, onMouseEnter, onMouseLeave, isPau
                     </button>
                 )}
             </div>
-            <div className="flex flex-col items-start gap-3.5 text-left h-48">
+            <div className="flex flex-col items-start gap-2 text-left">
                 <p className={`text-2xl font-semibold text-slate-800 ${animClass('animate-fade-in-up')}`} style={{ animationDelay: '100ms' }}>{step.title}</p>
                 <p className={`text-base tracking-tight text-gray-600 ${animClass('animate-fade-in-up')}`} style={{ animationDelay: '200ms' }}>{step.description}</p>
-                {config.showNavButtons && (
-                  <div className={`flex w-full justify-between mt-auto ${animClass('animate-fade-in-up')}`} style={{ animationDelay: '300ms' }}>
-                      <button onClick={() => onNavigate(-1)} className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium h-10 rounded-md px-6 text-slate-600 border bg-white shadow-xs hover:bg-gray-50">
-                          <ArrowLeftIcon /><span>Ant</span>
-                      </button>
-                      <button onClick={() => onNavigate(1)} className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium h-10 rounded-md px-6 bg-primary text-white shadow-xs hover:bg-opacity-90">
-                          <span>Sig</span><ArrowRightIcon />
-                      </button>
-                  </div>
-                )}
             </div>
+            {config.showNavButtons && (
+              <div className={`flex w-full justify-between mt-auto ${animClass('animate-fade-in-up')}`} style={{ animationDelay: '300ms' }}>
+                  <button onClick={() => onNavigate(-1)} className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium h-10 rounded-md px-6 text-slate-600 border bg-white shadow-xs hover:bg-gray-50">
+                      <ArrowLeftIcon /><span>Ant</span>
+                  </button>
+                  <button onClick={() => onNavigate(1)} className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium h-10 rounded-md px-6 bg-primary text-white shadow-xs hover:bg-opacity-90">
+                      <span>Sig</span><ArrowRightIcon />
+                  </button>
+              </div>
+            )}
             {config.autoplay && config.showProgressBar && (
                 <div className="absolute bottom-0 left-0 right-0 h-2.5 px-6 pb-2">
                     <div className="w-full bg-slate-200 rounded-full h-1">

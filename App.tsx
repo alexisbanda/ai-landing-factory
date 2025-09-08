@@ -58,7 +58,6 @@ const App: React.FC = () => {
         {sectionVisibility.hero && (
           <>
             <Hero onOpenDemoModal={handleOpenDemoModal} onOpenSignUpModal={handleOpenSignUpModal} />
-            <SectionDivider />
           </>
         )}
         {sectionVisibility.featuresTabs && (

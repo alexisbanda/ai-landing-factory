@@ -196,7 +196,7 @@ const Hero: React.FC<HeroProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
 
 
   return (
-    <section className={`relative w-full overflow-hidden flex items-center min-h-screen text-center ${isDark ? 'bg-cleat-dark' : 'bg-neutral-50'}`}>
+    <section className={`relative w-full overflow-hidden py-16 md:py-20 text-center ${isDark ? 'bg-cleat-dark' : 'bg-neutral-50'}`}>
       {heroConfig.showBackgroundImage && heroConfig.backgroundImage.url && (
         <div 
           className={`absolute inset-0 z-0 bg-cover bg-center transition-all duration-500 ${heroConfig.backgroundImage.blur} ${heroConfig.backgroundImage.brightness} ${heroConfig.backgroundImage.opacity}`}
