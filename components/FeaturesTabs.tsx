@@ -72,7 +72,7 @@ const featuresData: TabFeature[] = [
         headingGradient: "un Agente Inteligente",
         description: "No ofrecemos la IA como un extra caro. Es nuestro estándar. Cada página que construimos viene equipada con capacidades de IA avanzadas, transformando tu web en un activo que trabaja 24/7 para tu negocio.",
         details: ["Chatbots inteligentes para capturar leads.", "Contenido dinámico optimizado por IA.", "Una ventaja competitiva real, incluida de serie."],
-        image: "https://images.unsplash.com/photo-1516048015947-89335d862b2b?q=80&w=2864&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1677756119517-756a188d2d94?q=80&w=2940&auto=format&fit=crop",
         link: "#"
     },
     {
@@ -94,7 +94,7 @@ const featuresData: TabFeature[] = [
         headingGradient: "Optimizado para Vender",
         description: "Nuestra IA propone, pero el ojo experto humano refina. Creamos diseños únicos que no solo son estéticos, sino que están pensados para convertir y reflejar tu marca a la perfección, garantizando una experiencia de usuario impecable.",
         details: ["Diseños basados en tu identidad de marca.", "Optimización UX/UI para la máxima conversión.", "Mockups interactivos para tu validación."],
-        image: "https://images.unsplash.com/photo-1560472354-b33ff08c84a4?q=80&w=2814&auto=format&fit=crop",
+        image: "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?q=80&w=2940&auto=format&fit=crop",
         link: "#"
     },
     {

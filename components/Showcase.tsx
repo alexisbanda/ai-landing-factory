@@ -8,6 +8,7 @@ import Modal from './Modal';
 interface Template {
   id: number;
   title: string;
+  description: string;
   category: string;
   image: string;
   previewImage: string;
@@ -18,6 +19,7 @@ const templates: Template[] = [
   { 
     id: 1, 
     title: "AI Landing Factory", 
+    description: "Genera landing pages optimizadas para conversión utilizando inteligencia artificial.",
     category: "Tecnología", 
     image: "https://images.unsplash.com/photo-1677756119517-756a188d2d94?q=80&w=2940&auto=format&fit=crop", 
     previewImage: "https://images.unsplash.com/photo-1677756119517-756a188d2d94?q=80&w=2940&auto=format&fit=crop", 
@@ -26,22 +28,25 @@ const templates: Template[] = [
   { 
     id: 2, 
     title: "InsurePro AI", 
+    description: "Plataforma para cotizar y gestionar seguros de forma inteligente y automatizada.",
     category: "Seguros", 
-    image: "https://images.unsplash.com/photo-1560520450-9a5e2c204608?q=80&w=2940&auto=format&fit=crop", 
-    previewImage: "https://images.unsplash.com/photo-1560520450-9a5e2c204608?q=80&w=2940&auto=format&fit=crop", 
+    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=2873&auto=format&fit=crop", 
+    previewImage: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=2873&auto=format&fit=crop", 
     demoUrl: "https://insurepro-ai.netlify.app/" 
   },
   { 
     id: 3, 
     title: "Invercorp", 
+    description: "Asesoramiento financiero y gestión de inversiones para maximizar tu patrimonio.",
     category: "Finanzas", 
-    image: "https://images.unsplash.com/photo-1665686310934-865eb9941a1d?q=80&w=2874&auto=format&fit=crop", 
-    previewImage: "https://images.unsplash.com/photo-1665686310934-865eb9941a1d?q=80&w=2874&auto=format&fit=crop", 
+    image: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?q=80&w=2940&auto=format&fit=crop", 
+    previewImage: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?q=80&w=2940&auto=format&fit=crop", 
     demoUrl: "https://invercorp.netlify.app/" 
   },
   { 
     id: 4, 
     title: "Ecuatorianos en Canadá", 
+    description: "Comunidad online para ecuatorianos residentes en Canadá. Noticias, eventos y recursos.",
     category: "Comunidad", 
     image: "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?q=80&w=2940&auto=format&fit=crop", 
     previewImage: "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?q=80&w=2940&auto=format&fit=crop", 
@@ -50,49 +55,55 @@ const templates: Template[] = [
   { 
     id: 5, 
     title: "DentalCare Landing", 
+    description: "Página de destino moderna para clínicas dentales que buscan atraer nuevos pacientes.",
     category: "Salud", 
-    image: "https://images.unsplash.com/photo-1588776814546-da637f43b7fe?q=80&w=2940&auto=format&fit=crop", 
-    previewImage: "https://images.unsplash.com/photo-1588776814546-da637f43b7fe?q=80&w=2940&auto=format&fit=crop", 
+    image: "https://images.pexels.com/photos/2085831/pexels-photo-2085831.jpeg", 
+    previewImage: "https://images.pexels.com/photos/2085831/pexels-photo-2085831.jpeg", 
     demoUrl: "https://dentalcare-landing.netlify.app/" 
   },
   { 
     id: 6, 
     title: "Leadership Landing", 
+    description: "Sitio profesional para consultores de liderazgo y coaches ejecutivos.",
     category: "Consultoría", 
-    image: "https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2942&auto=format&fit=crop", 
-    previewImage: "https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2942&auto=format&fit=crop", 
+    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2940&auto=format&fit=crop", 
+    previewImage: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2940&auto=format&fit=crop", 
     demoUrl: "https://leadership-landing.netlify.app/" 
   },
   { 
     id: 7, 
     title: "Vancouver Coffee", 
+    description: "Descubre los mejores cafés de especialidad en Vancouver. Un directorio para amantes del café.",
     category: "Negocio Local", 
-    image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=2787&auto=format&fit=crop", 
-    previewImage: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=2787&auto=format&fit=crop", 
+    image: "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?q=80&w=2884&auto=format&fit=crop", 
+    previewImage: "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?q=80&w=2884&auto=format&fit=crop", 
     demoUrl: "https://vancouver-coffee-landing.netlify.app/" 
   },
   { 
     id: 8, 
     title: "Freelancer Portfolio", 
+    description: "Portfolio minimalista y elegante para mostrar tus proyectos como freelancer.",
     category: "Portfolio", 
-    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2944&auto=format&fit=crop", 
-    previewImage: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2944&auto=format&fit=crop", 
+    image: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=2940&auto=format&fit=crop", 
+    previewImage: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=2940&auto=format&fit=crop", 
     demoUrl: "https://freelancer-landing.netlify.app/" 
   },
   { 
     id: 9, 
     title: "Billybon Detalles", 
+    description: "Tienda online de regalos y detalles personalizados para toda ocasión.",
     category: "E-commerce", 
-    image: "https://images.unsplash.com/photo-1599745588545-c9c051a83a18?q=80&w=2940&auto=format&fit=crop", 
-    previewImage: "https://images.unsplash.com/photo-1599745588545-c9c051a83a18?q=80&w=2940&auto=format&fit=crop", 
+    image: "https://images.pexels.com/photos/1036804/pexels-photo-1036804.jpeg", 
+    previewImage: "https://images.pexels.com/photos/1036804/pexels-photo-1036804.jpeg", 
     demoUrl: "https://billybon-detalles.netlify.app/" 
   },
   { 
     id: 10, 
     title: "Vancouver Landings", 
+    description: "Agencia especializada en el diseño y desarrollo de landing pages de alto impacto.",
     category: "Agencia", 
-    image: "https://images.unsplash.com/photo-1531973576160-7125cd663d86?q=80&w=2940&auto=format&fit=crop", 
-    previewImage: "https://images.unsplash.com/photo-1531973576160-7125cd663d86?q=80&w=2940&auto=format&fit=crop", 
+    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2940&auto=format&fit=crop", 
+    previewImage: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2940&auto=format&fit=crop", 
     demoUrl: "https://vancouver-landings.netlify.app/" 
   }
 ];
@@ -170,6 +181,7 @@ const ShowcaseModal: React.FC<{ template: Template | null; onClose: () => void; 
             decoding="async"
           />
         </div>
+        <p className="text-slate-600 px-2 py-4">{template.description}</p>
         <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 p-2">
           <button 
             onClick={onClose}
