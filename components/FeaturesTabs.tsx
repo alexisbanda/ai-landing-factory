@@ -207,7 +207,7 @@ const FeaturesTabs: React.FC = () => {
                         <div role="tablist" className={`hidden relative ${
                             isVerticalLayout 
                             ? (isFullBleed ? 'lg:col-span-3 lg:col-start-2' : 'w-full') + ' lg:flex flex-col w-full max-w-sm mx-auto lg:w-full lg:max-w-none lg:space-y-1.5' 
-                            : 'lg:flex items-center justify-center text-muted-foreground h-auto w-full space-x-1.5 rounded-lg bg-slate-100 p-1.5'
+                            : 'lg:grid lg:grid-cols-5 gap-1.5 items-center text-muted-foreground h-auto w-full rounded-lg bg-slate-100 p-1.5'
                         }`}>
                             {featuresData.map((feature, index) => (
                                 <button

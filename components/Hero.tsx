@@ -48,7 +48,12 @@ const Hero: React.FC<HeroProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
         { name: 'Node.js', light: 'https://cdn.simpleicons.org/nodedotjs/339933', dark: 'https://cdn.simpleicons.org/nodedotjs/FFFFFF' },
         { name: 'TypeScript', light: 'https://cdn.simpleicons.org/typescript/3178C6', dark: 'https://cdn.simpleicons.org/typescript/FFFFFF' },
         { name: 'Vercel', light: 'https://cdn.simpleicons.org/vercel/000000', dark: 'https://cdn.simpleicons.org/vercel/FFFFFF' },
-        { name: 'Amazon AWS', light: 'https://cdn.simpleicons.org/aws/232F3E', dark: 'https://cdn.simpleicons.org/aws/FFFFFF' },
+        
+        { name: 'Next.js', light: 'https://cdn.simpleicons.org/nextdotjs/000000', dark: 'https://cdn.simpleicons.org/nextdotjs/FFFFFF' },
+        { name: 'Tailwind CSS', light: 'https://cdn.simpleicons.org/tailwindcss/06B6D4', dark: 'https://cdn.simpleicons.org/tailwindcss/FFFFFF' },
+        { name: 'Docker', light: 'https://cdn.simpleicons.org/docker/2496ED', dark: 'https://cdn.simpleicons.org/docker/FFFFFF' },
+        { name: 'Figma', light: 'https://cdn.simpleicons.org/figma/F24E1E', dark: 'https://cdn.simpleicons.org/figma/FFFFFF' },
+        { name: 'PostgreSQL', light: 'https://cdn.simpleicons.org/postgresql/4169E1', dark: 'https://cdn.simpleicons.org/postgresql/FFFFFF' },
     ];
 
     const keyFeatures = [
@@ -286,16 +291,21 @@ const Hero: React.FC<HeroProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
             <p className={`text-sm font-semibold tracking-wider uppercase ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
               {t('hero.social_proof_title')}
             </p>
-            <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-4">
-              {techStack.map((tech) => (
-                <img
-                  key={tech.name}
-                  src={isDark ? tech.dark : tech.light}
-                  alt={`${tech.name} logo`}
-                  className="h-8 w-auto object-contain transition-opacity duration-300 opacity-70 hover:opacity-100"
-                  title={tech.name}
-                />
-              ))}
+            <div className="relative w-full max-w-4xl mx-auto overflow-hidden">
+              <div className="flex w-max animate-scroll">
+                {[...techStack, ...techStack].map((tech, index) => (
+                  <div key={index} className="flex-shrink-0 w-36 flex justify-center">
+                    <img
+                      src={isDark ? tech.dark : tech.light}
+                      alt={`${tech.name} logo`}
+                      className="h-8 w-auto object-contain transition-opacity duration-300 opacity-70 hover:opacity-100"
+                      title={tech.name}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className={`absolute top-0 left-0 w-16 h-full bg-gradient-to-r ${isDark ? 'from-cleat-dark' : 'from-neutral-50'}`} />
+              <div className={`absolute top-0 right-0 w-16 h-full bg-gradient-to-l ${isDark ? 'from-cleat-dark' : 'from-neutral-50'}`} />
             </div>
           </div>
         )}
@@ -305,7 +315,7 @@ const Hero: React.FC<HeroProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
             background-color: ${isDark ? '#292524' /* stone-800 */ : '#FAFAF9' /* stone-50 */};
         }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .animate-scroll { animation: scroll 40s linear infinite; }
+        .animate-scroll { animation: scroll 80s linear infinite; }
         @keyframes fade-in-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in-up { animation-name: fade-in-up; animation-duration: 0.6s; animation-timing-function: ease-out; animation-fill-mode: forwards; opacity: 0; }
         @keyframes draw-underline { to { stroke-dashoffset: 0; } }
