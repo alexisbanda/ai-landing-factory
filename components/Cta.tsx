@@ -2,10 +2,10 @@ import React from 'react';
 
 interface CtaProps {
   onOpenDemoModal: () => void;
-  onOpenSignUpModal: () => void;
+  onOpenContactModal: () => void;
 }
 
-const Cta: React.FC<CtaProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
+const Cta: React.FC<CtaProps> = ({ onOpenDemoModal, onOpenContactModal }) => {
   const benefits = [
     "Textos impulsados por IA que convierten visitantes en clientes",
     "Páginas ultrarrápidas optimizadas para Core Web Vitals y SEO",
@@ -44,7 +44,7 @@ const Cta: React.FC<CtaProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
               </div>
               <div className="flex flex-col items-center justify-center gap-3 pt-4 sm:flex-row sm:gap-4">
                 <button
-                  onClick={onOpenSignUpModal}
+                  onClick={onOpenContactModal}
                   className="w-full sm:w-auto rounded-full bg-gradient-to-r from-theme-cta-gradient-start to-theme-cta-gradient-end px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:scale-[1.02] hover:opacity-90 sm:px-8 sm:text-base"
                 >
                   INICIAR PRUEBA GRATIS

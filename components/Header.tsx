@@ -11,7 +11,7 @@ const headerConfig = {
   sophisticatedHovers: true,
   advancedMenuAnimation: true,
   showWatchDemoButton: true,
-  showGetStartedButton: false,
+  showGetStartedButton: true,
   showLoginButton: true,
 };
 
@@ -24,10 +24,10 @@ const i18nConfig = {
 
 interface HeaderProps {
   onOpenDemoModal: () => void;
-  onOpenSignUpModal: () => void;
+  onOpenContactModal: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
+const Header: React.FC<HeaderProps> = ({ onOpenDemoModal, onOpenContactModal }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFeaturesOpen, setIsFeaturesOpen] = useState(false);
   const [isMobileFeaturesOpen, setIsMobileFeaturesOpen] = useState(false);
@@ -363,11 +363,11 @@ const Header: React.FC<HeaderProps> = ({ onOpenDemoModal, onOpenSignUpModal }) =
                 </button>
             )}
             {headerConfig.showGetStartedButton && (
-                <button onClick={onOpenSignUpModal} className={`
+                <button onClick={onOpenContactModal} className={`
                     relative overflow-hidden bg-cleat-dark text-white px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 group
                     ${headerConfig.sophisticatedHovers ? 'transform hover:scale-105' : 'hover:bg-opacity-90'}
                 `}>
-                    EMPEZAR
+                    CONTACTO
                     {headerConfig.sophisticatedHovers && (
                         <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-700 group-hover:left-[100%]" />
                     )}
@@ -390,7 +390,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenDemoModal, onOpenSignUpModal }) =
           
           {/* Mobile Menu Toggle */}
           <div className="lg:hidden flex items-center gap-2">
-             <button onClick={onOpenSignUpModal} className="bg-cleat-dark text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-opacity-90">EMPEZAR</button>
+             <button onClick={onOpenContactModal} className="bg-cleat-dark text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-opacity-90">CONTACTO</button>
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label="Toggle menu">
               {isMenuOpen ? <XIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
             </button>
@@ -433,7 +433,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenDemoModal, onOpenSignUpModal }) =
                         <button onClick={onOpenDemoModal} className="w-full text-center border border-cleat-dark text-cleat-dark px-4 py-2 rounded-full text-sm font-semibold hover:bg-cleat-dark hover:text-white transition-all">VER DEMO</button>
                     )}
                     {headerConfig.showGetStartedButton && (
-                         <button onClick={onOpenSignUpModal} className="w-full text-center bg-cleat-dark text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-opacity-90">EMPEZAR</button>
+                         <button onClick={onOpenContactModal} className="w-full text-center bg-cleat-dark text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-opacity-90">CONTACTO</button>
                     )}
                     {headerConfig.showLoginButton && (
                         <a href="#" className="mt-2 flex items-center justify-center gap-1 text-base hover:text-primary">

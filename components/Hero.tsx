@@ -30,10 +30,10 @@ const heroConfig = {
 
 interface HeroProps {
   onOpenDemoModal: () => void;
-  onOpenSignUpModal: () => void;
+  onOpenContactModal: () => void;
 }
 
-const Hero: React.FC<HeroProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
+const Hero: React.FC<HeroProps> = ({ onOpenDemoModal, onOpenContactModal }) => {
     const { t } = useLanguage();
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -251,7 +251,7 @@ const Hero: React.FC<HeroProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
               id="main-description" style={{ animationDelay: '250ms' }}
             >
               {t('hero.description_part1')}
-              <span className={`font-extrabold ${isDark ? 'text-neutral-100' : 'text-cleat-dark'}`}>VANLANDINGS</span>
+              <span className={`font-extrabold ${isDark ? 'text-neutral-100' : 'text-cleat-dark'}`}> SOMOS VANLANDINGS</span>
               {t('hero.description_part2')}
             </p>
         )}
@@ -261,13 +261,13 @@ const Hero: React.FC<HeroProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
               className="mb-12 flex flex-col sm:flex-row flex-nowrap justify-center gap-4 animate-fade-in-up"
               style={{ animationDelay: '400ms' }}
             >
-              <button onClick={onOpenSignUpModal} className="group w-full sm:w-auto relative overflow-hidden rounded-full px-8 py-3 text-base font-semibold text-cleat-dark shadow-lg transition-all duration-300 hover:shadow-xl bg-gradient-to-r from-theme-accent-primary to-theme-accent-secondary transform hover:scale-105">
-                {t('hero.cta_free')}
-                <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-all duration-700 ease-in-out group-hover:left-[100%]" />
-              </button>
-              <a href="#ai-concept-generator" className={`w-full sm:w-auto relative flex items-center justify-center rounded-full border-2 px-8 py-3 text-base font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] ${isDark ? 'border-neutral-200 bg-cleat-dark/50 text-neutral-100 hover:bg-neutral-100 hover:text-cleat-dark' : 'border-cleat-dark bg-transparent text-cleat-dark hover:bg-cleat-dark hover:text-white'}`}>
+              <a href="#ai-concept-generator" className="group w-full sm:w-auto relative flex items-center justify-center overflow-hidden rounded-full px-8 py-3 text-base font-semibold text-cleat-dark shadow-lg transition-all duration-300 hover:shadow-xl bg-gradient-to-r from-theme-accent-primary to-theme-accent-secondary transform hover:scale-105">
                 Probar el Generador
+                <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-all duration-700 ease-in-out group-hover:left-[100%]" />
               </a>
+              <button onClick={onOpenContactModal} className={`w-full sm:w-auto relative rounded-full border-2 px-8 py-3 text-base font-semibold shadow-md transition-all duration-300 hover:scale-[1.02] ${isDark ? 'border-neutral-200 bg-cleat-dark/50 text-neutral-100 hover:bg-neutral-100 hover:text-cleat-dark' : 'border-cleat-dark bg-transparent text-cleat-dark hover:bg-cleat-dark hover:text-white'}`}>
+                {t('hero.cta_contact')}
+              </button>
             </div>
         )}
 

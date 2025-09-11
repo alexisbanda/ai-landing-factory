@@ -55,10 +55,10 @@ const pricingPlans = [
 ];
 
 interface PricingProps {
-  onOpenSignUpModal: () => void;
+  onOpenContactModal: () => void;
 }
 
-const Pricing: React.FC<PricingProps> = ({ onOpenSignUpModal }) => {
+const Pricing: React.FC<PricingProps> = ({ onOpenContactModal }) => {
   const [activeIndex, setActiveIndex] = useState(1); // Start with the popular plan (index 1)
 
   return (
@@ -109,7 +109,7 @@ const Pricing: React.FC<PricingProps> = ({ onOpenSignUpModal }) => {
 
             <div className="mt-10">
               <button
-                onClick={onOpenSignUpModal}
+                onClick={onOpenContactModal}
                 className={`w-full text-center inline-block rounded-full px-6 py-3 font-semibold transition-all duration-300 ${
                   pricingPlans[activeIndex].isPopular
                     ? 'bg-primary text-white shadow-md hover:bg-opacity-90'
@@ -171,7 +171,7 @@ const Pricing: React.FC<PricingProps> = ({ onOpenSignUpModal }) => {
 
               <div className="mt-10">
                 <button
-                  onClick={onOpenSignUpModal}
+                  onClick={onOpenContactModal}
                   className={`w-full text-center inline-block rounded-full px-6 py-3 font-semibold transition-all duration-300 ${
                     plan.isPopular
                       ? 'bg-primary text-white shadow-md hover:bg-opacity-90'

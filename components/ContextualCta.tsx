@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 
 interface ContextualCtaProps {
   onOpenDemoModal: () => void;
-  onOpenSignUpModal: () => void;
+  onOpenContactModal: () => void;
 }
 
-const ContextualCtaComponent: React.FC<ContextualCtaProps> = ({ onOpenDemoModal, onOpenSignUpModal }) => {
+const ContextualCtaComponent: React.FC<ContextualCtaProps> = ({ onOpenDemoModal, onOpenContactModal }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const ContextualCtaComponent: React.FC<ContextualCtaProps> = ({ onOpenDemoModal,
               VER DEMO
             </button>
             <button
-              onClick={onOpenSignUpModal}
+              onClick={onOpenContactModal}
               className="w-full rounded-full bg-cleat-dark px-4 py-2 text-center text-xs font-semibold text-white transition-all duration-300 hover:bg-opacity-90 sm:w-auto sm:text-sm"
             >
               EMPIEZA GRATIS

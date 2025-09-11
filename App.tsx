@@ -16,7 +16,7 @@ import Footer from './components/Footer';
 import ContextualCta from './components/ContextualCta';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import DemoModal from './components/DemoModal';
-import SignUpModal from './components/SignUpModal';
+import ContactModal from './components/ContactModal';
 import AIConceptGenerator from './components/AIConceptGenerator';
 
 // =================================================================
@@ -42,22 +42,22 @@ const sectionVisibility = {
 
 const App: React.FC = () => {
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
-  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const handleOpenDemoModal = () => setIsDemoModalOpen(true);
   const handleCloseDemoModal = () => setIsDemoModalOpen(false);
 
-  const handleOpenSignUpModal = () => setIsSignUpModalOpen(true);
-  const handleCloseSignUpModal = () => setIsSignUpModalOpen(false);
+  const handleOpenContactModal = () => setIsContactModalOpen(true);
+  const handleCloseContactModal = () => setIsContactModalOpen(false);
 
 
   return (
     <div className="bg-white font-sans text-gray-600">
-      <Header onOpenDemoModal={handleOpenDemoModal} onOpenSignUpModal={handleOpenSignUpModal} />
+      <Header onOpenDemoModal={handleOpenDemoModal} onOpenContactModal={handleOpenContactModal} />
       <main>
         {sectionVisibility.hero && (
           <>
-            <Hero onOpenDemoModal={handleOpenDemoModal} onOpenSignUpModal={handleOpenSignUpModal} />
+            <Hero onOpenDemoModal={handleOpenDemoModal} onOpenContactModal={handleOpenContactModal} />
           </>
         )}
         {sectionVisibility.featuresTabs && (
@@ -110,7 +110,7 @@ const App: React.FC = () => {
         )}
         {sectionVisibility.pricing && (
           <>
-            <Pricing onOpenSignUpModal={handleOpenSignUpModal} />
+            <Pricing onOpenContactModal={handleOpenContactModal} />
             <SectionDivider />
           </>
         )}
@@ -121,14 +121,14 @@ const App: React.FC = () => {
           </>
         )}
         {sectionVisibility.cta && (
-          <Cta onOpenDemoModal={handleOpenDemoModal} onOpenSignUpModal={handleOpenSignUpModal} />
+          <Cta onOpenDemoModal={handleOpenDemoModal} onOpenContactModal={handleOpenContactModal} />
         )}
       </main>
-      <ContextualCta onOpenDemoModal={handleOpenDemoModal} onOpenSignUpModal={handleOpenSignUpModal} />
+      <ContextualCta onOpenDemoModal={handleOpenDemoModal} onOpenContactModal={handleOpenContactModal} />
       <ScrollToTopButton />
       <Footer onOpenDemoModal={handleOpenDemoModal} />
       <DemoModal isOpen={isDemoModalOpen} onClose={handleCloseDemoModal} />
-      <SignUpModal isOpen={isSignUpModalOpen} onClose={handleCloseSignUpModal} />
+      <ContactModal isOpen={isContactModalOpen} onClose={handleCloseContactModal} />
     </div>
   );
 };
