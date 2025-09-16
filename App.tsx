@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useState as useReactState } from 'react';
+import { PromotionProvider, usePromotion } from './contexts/PromotionContext';
+import PromotionBar from './components/PromotionBar';
+import PromotionModal from './components/PromotionModal';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import SectionDivider from './components/SectionDivider';
@@ -40,9 +43,11 @@ const sectionVisibility = {
 // =================================================================
 
 
-const App: React.FC = () => {
-  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+const AppContent: React.FC = () => {
+  const [isDemoModalOpen, setIsDemoModalOpen] = useReactState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useReactState(false);
+  const [closedPromotionIds, setClosedPromotionIds] = useReactState<string[]>([]);
+  const { promotions } = usePromotion();
 
   const handleOpenDemoModal = () => setIsDemoModalOpen(true);
   const handleCloseDemoModal = () => setIsDemoModalOpen(false);
@@ -50,9 +55,47 @@ const App: React.FC = () => {
   const handleOpenContactModal = () => setIsContactModalOpen(true);
   const handleCloseContactModal = () => setIsContactModalOpen(false);
 
+  const handleClosePromotion = (id: string) => {
+    setClosedPromotionIds((prev) => [...prev, id]);
+  };
+
+  // Render PromotionBar(s) at the top
+  const activeBars = promotions.filter(p => p.type === 'bar' && !closedPromotionIds.includes(p.id));
+  // Render PromotionModal(s) as pop-ups
+  const activeModals = promotions.filter(p => p.type === 'modal' && !closedPromotionIds.includes(p.id));
+
+  // Modal promo: solo mostrar tras scroll y esperar unos segundos
+  const [showPromoModal, setShowPromoModal] = React.useState(false);
+  React.useEffect(() => {
+    let scrolled = false;
+    let timer: NodeJS.Timeout;
+    const handleScroll = () => {
+      if (!scrolled && window.scrollY > 100) {
+        scrolled = true;
+        timer = setTimeout(() => setShowPromoModal(true), 2000); // 2 segundos tras scroll
+        window.removeEventListener('scroll', handleScroll);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (timer) clearTimeout(timer);
+    };
+  }, []);
+
+  // Función para mostrar precios (scroll a sección pricing)
+  const handleOpenPricing = () => {
+    const pricingSection = document.getElementById('pricing');
+    if (pricingSection) {
+      pricingSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="bg-white font-sans text-gray-600">
+      {activeBars.map(promo => (
+        <PromotionBar key={promo.id} promotion={promo} onClose={() => handleClosePromotion(promo.id)} onOpenPricing={handleOpenPricing} />
+      ))}
       <Header onOpenDemoModal={handleOpenDemoModal} onOpenContactModal={handleOpenContactModal} />
       <main>
         {sectionVisibility.hero && (
@@ -129,8 +172,17 @@ const App: React.FC = () => {
       <Footer onOpenDemoModal={handleOpenDemoModal} />
       <DemoModal isOpen={isDemoModalOpen} onClose={handleCloseDemoModal} />
       <ContactModal isOpen={isContactModalOpen} onClose={handleCloseContactModal} />
+      {activeModals.map(promo => (
+        showPromoModal && <PromotionModal key={promo.id} promotion={promo} onClose={() => { handleClosePromotion(promo.id); setShowPromoModal(false); }} onOpenContactModal={handleOpenContactModal} />
+      ))}
     </div>
   );
 };
+
+const App: React.FC = () => (
+  <PromotionProvider>
+    <AppContent />
+  </PromotionProvider>
+);
 
 export default App;

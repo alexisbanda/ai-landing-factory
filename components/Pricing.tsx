@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { usePromotion } from '../contexts/PromotionContext';
 import { CheckIcon } from './icons/Icons';
 
 // Nueva configuración de planes con dos opciones de pago único
@@ -109,6 +110,31 @@ const Pricing: React.FC<PricingProps> = ({ onOpenContactModal }) => {
   const [paymentType, setPaymentType] = useState<'monthly' | 'one-time'>('one-time');
   const monthlyPlans = pricingPlans.filter(plan => plan.type === 'monthly');
   const oneTimePlans = pricingPlans.filter(plan => plan.type === 'one-time');
+  const { promotions } = usePromotion();
+  // Detectar si hay promoción activa que afecte precios y obtener porcentaje
+  const activePromo = promotions.find(p => p.type === 'bar' && p.isActive && p.message && p.message.match(/\d+%/));
+  const promoPercent = activePromo ? activePromo.message.match(/(\d+)%/)?.[1] : null;
+  const hasActivePromo = !!promoPercent;
+  // Countdown logic for promo
+  const [promoTimeLeft, setPromoTimeLeft] = React.useState<string | null>(null);
+  React.useEffect(() => {
+    if (!activePromo?.endDate) return;
+    const end = new Date(activePromo.endDate).getTime();
+    const timer = setInterval(() => {
+      const now = Date.now();
+      const diff = end - now;
+      if (diff <= 0) {
+        setPromoTimeLeft('00:00:00');
+        clearInterval(timer);
+        return;
+      }
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      setPromoTimeLeft(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [activePromo?.endDate]);
 
   return (
     <section id="pricing" className="py-16 md:py-20 bg-white">
@@ -120,6 +146,19 @@ const Pricing: React.FC<PricingProps> = ({ onOpenContactModal }) => {
           <h3 className="text-lg text-gray-600 max-w-3xl mx-auto">
             Elige el plan que se adapte a tu etapa y empieza a convertir visitantes en clientes hoy mismo.
           </h3>
+          {hasActivePromo && promoPercent && (
+            <div className="mt-4 flex justify-center">
+              <span className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-neutral-900 text-neutral-100 text-base font-semibold border border-primary/30 shadow animate-fade-in-up">
+                <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="10"/></svg>
+                {promoPercent}% de descuento por promoción
+                {promoTimeLeft && (
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded bg-neutral-800 text-yellow-200 font-mono text-xs font-bold border border-yellow-700/30">
+                    Termina en {promoTimeLeft}
+                  </span>
+                )}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Switcher de tipo de pago */}
@@ -159,9 +198,12 @@ const Pricing: React.FC<PricingProps> = ({ onOpenContactModal }) => {
                 )}
                 <div className="flex-grow">
                   <h3 className="text-2xl font-bold text-cleat-dark text-center">{plan.name}</h3>
-                  <div className="mt-4 text-center">
+                  <div className="mt-4 text-center relative flex items-center justify-center">
                     <span className="text-4xl font-extrabold text-cleat-dark">{plan.price}</span>
                     <span className="text-lg font-medium text-gray-500">{plan.billingCycle}</span>
+                    {hasActivePromo && promoPercent && (
+                      <span className="ml-2 px-2 py-1 rounded bg-yellow-100 text-yellow-800 text-xs font-semibold border border-yellow-300 shadow animate-pulse absolute right-0 top-0">{promoPercent}% OFF</span>
+                    )}
                   </div>
                   <p className="mt-4 text-center text-gray-600 h-16">{plan.description}</p>
                   <ul className="mt-8 space-y-4">
@@ -197,8 +239,11 @@ const Pricing: React.FC<PricingProps> = ({ onOpenContactModal }) => {
               >
                 <div className="flex-grow">
                   <h3 className="text-2xl font-bold text-cleat-dark text-center">{plan.name}</h3>
-                  <div className="mt-4 text-center">
+                  <div className="mt-4 text-center relative flex items-center justify-center">
                     <span className="text-4xl font-extrabold text-cleat-dark">{plan.price}</span>
+                    {hasActivePromo && promoPercent && (
+                      <span className="ml-2 px-2 py-1 rounded bg-yellow-100 text-yellow-800 text-xs font-semibold border border-yellow-300 shadow animate-pulse absolute right-0 top-0">{promoPercent}% OFF</span>
+                    )}
                   </div>
                   <p className="mt-4 text-center text-gray-600 h-16">{plan.description}</p>
                   <ul className="mt-8 space-y-4">
