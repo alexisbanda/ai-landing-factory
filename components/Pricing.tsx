@@ -2,55 +2,102 @@
 import React, { useState } from 'react';
 import { CheckIcon } from './icons/Icons';
 
-// Configuration for plans
+// Nueva configuración de planes con dos opciones de pago único
 const pricingPlans = [
   {
-    name: "Básico",
-    price: "$19",
+    name: "Emprendedor",
+    price: "$29",
     billingCycle: "/mes",
-    description: "Perfecto para lanzar tu primera idea o proyecto personal con una página profesional.",
+    description: "Ideal para validar una idea o lanzar tu primer proyecto online de forma rápida y asequible.",
     features: [
-      "1 Landing Page",
-      "Formulario de Contacto",
-      "Hosting Incluido",
-      "Analíticas Básicas",
-      "Templates Estándar",
-      "Soporte por Email",
+      "1 Página Publicada",
+      "50 créditos IA / mes",
+      "Dominio Personalizado",
+      "Hosting y SSL incluidos",
+      "Integraciones básicas (hasta 2)",
+      "Panel de analíticas básico",
+      "Soporte por Email (48h)",
+      "Marca 'Made with...' incluida",
     ],
-    ctaText: "Empezar Plan Básico",
+    ctaText: "Empezar como Emprendedor",
     isPopular: false,
+    type: "monthly",
   },
   {
     name: "Profesional",
-    price: "$49",
+    price: "$59",
     billingCycle: "/mes",
-    description: "La solución ideal para negocios en crecimiento que buscan optimizar la conversión.",
+    description: "La opción inteligente para PYMES que lanzan campañas de marketing continuas y buscan agilidad y conversión.",
     features: [
-      "Hasta 5 Landing Pages",
-      "Chatbot con IA Personalizado",
-      "Componentes Premium",
-      "Integraciones con CRM y Mail",
-      "Pruebas A/B Automatizadas",
-      "Soporte Prioritario",
+      "10 Páginas Publicadas",
+      "200 créditos IA / mes",
+      "Dominio Personalizado",
+      "Hosting y SSL incluidos",
+      "Integraciones avanzadas (ilimitadas)",
+      "Panel avanzado + A/B Testing",
+      "Soporte Prioritario (24h)",
+      "Sin marca 'Made with...'",
     ],
-    ctaText: "Empezar Plan Profesional",
+    ctaText: "Empezar como Profesional",
     isPopular: true,
+    type: "monthly",
   },
   {
-    name: "Ultra Instinto",
-    price: "$99",
+    name: "Agencia",
+    price: "$129",
     billingCycle: "/mes",
-    description: "Desata todo el poder de la IA para una automatización y resultados sin precedentes.",
+    description: "Para freelancers y agencias que gestionan múltiples clientes y buscan eficiencia y escalabilidad.",
     features: [
-      "Landing Pages Ilimitadas",
-      "Generación de Contenido con IA",
-      "Automatizaciones de Marketing",
-      "SEO Dinámico con IA",
-      "Analíticas Predictivas",
-      "Manager de Cuenta Dedicado",
+      "50 Páginas Publicadas",
+      "1,000 créditos IA / mes",
+      "Dominio Personalizado",
+      "Hosting y SSL incluidos",
+      "Integraciones avanzadas (ilimitadas)",
+      "Panel avanzado + A/B Testing",
+      "Soporte Prioritario + Chat",
+      "Marca blanca y gestión de clientes",
     ],
-    ctaText: "Empezar Plan Ultra",
+    ctaText: "Empezar como Agencia",
     isPopular: false,
+    type: "monthly",
+  },
+  {
+    name: "Proyecto Básico (Pago Único)",
+    price: "$99",
+    billingCycle: "",
+    description: "Para validar ideas o lanzamientos puntuales. Incluye lo esencial para estar online rápido.",
+    features: [
+      "1 Página Publicada",
+      "50 créditos IA (totales)",
+      "Dominio Personalizado",
+      "Hosting y SSL incluidos por 1 año",
+      "Integraciones básicas (hasta 2)",
+      "Panel de analíticas básico",
+      "Soporte por Email (48h)",
+      "Marca 'Made with...' incluida",
+    ],
+    ctaText: "Comprar Proyecto Básico",
+    isPopular: false,
+    type: "one-time",
+  },
+  {
+    name: "Proyecto Premium (Pago Único)",
+    price: "$179",
+    billingCycle: "",
+    description: "Para lanzamientos más exigentes: más IA, integraciones avanzadas y soporte extendido.",
+    features: [
+      "1 Página Publicada",
+      "200 créditos IA (totales)",
+      "Dominio Personalizado",
+      "Hosting y SSL incluidos por 2 años",
+      "Integraciones avanzadas (ilimitadas)",
+      "Panel avanzado + A/B Testing",
+      "Soporte Prioritario (24h)",
+      "Sin marca 'Made with...'",
+    ],
+    ctaText: "Comprar Proyecto Premium",
+    isPopular: false,
+    type: "one-time",
   },
 ];
 
@@ -59,7 +106,9 @@ interface PricingProps {
 }
 
 const Pricing: React.FC<PricingProps> = ({ onOpenContactModal }) => {
-  const [activeIndex, setActiveIndex] = useState(1); // Start with the popular plan (index 1)
+  const [paymentType, setPaymentType] = useState<'monthly' | 'one-time'>('one-time');
+  const monthlyPlans = pricingPlans.filter(plan => plan.type === 'monthly');
+  const oneTimePlans = pricingPlans.filter(plan => plan.type === 'one-time');
 
   return (
     <section id="pricing" className="py-16 md:py-20 bg-white">
@@ -73,117 +122,109 @@ const Pricing: React.FC<PricingProps> = ({ onOpenContactModal }) => {
           </h3>
         </div>
 
-        {/* Mobile Carousel */}
-        <div className="md:hidden">
-          <div
-            className={`relative rounded-xl border p-8 flex flex-col h-full transition-all duration-300 ${
-              pricingPlans[activeIndex].isPopular
-                ? 'border-primary shadow-2xl bg-primary/5'
-                : 'border-slate-200 bg-white shadow-lg'
-            }`}
+        {/* Switcher de tipo de pago */}
+        <div className="flex justify-center mb-10">
+          <button
+            className={`px-6 py-2 rounded-l-full font-semibold border transition-all duration-300 ${paymentType === 'monthly' ? 'bg-primary text-white border-primary' : 'bg-white text-cleat-dark border-slate-300'}`}
+            onClick={() => setPaymentType('monthly')}
           >
-            {pricingPlans[activeIndex].isPopular && (
-              <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2">
-                <span className="rounded-full bg-primary px-4 py-1 text-sm font-semibold text-white">
-                  MÁS POPULAR
-                </span>
-              </div>
-            )}
-            <div className="flex-grow">
-              <h3 className="text-2xl font-bold text-cleat-dark text-center">{pricingPlans[activeIndex].name}</h3>
-              <div className="mt-4 text-center">
-                <span className="text-4xl font-extrabold text-cleat-dark">{pricingPlans[activeIndex].price}</span>
-                <span className="text-lg font-medium text-gray-500">{pricingPlans[activeIndex].billingCycle}</span>
-              </div>
-              <p className="mt-4 text-center text-gray-600 h-16">{pricingPlans[activeIndex].description}</p>
-              
-              <ul className="mt-8 space-y-4">
-                {pricingPlans[activeIndex].features.map((feature, index) => (
-                  <li key={index} className="flex items-center gap-3">
-                    <CheckIcon className="h-5 w-5 flex-shrink-0 text-status-success" />
-                    <span className="text-slate-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            Suscripción Mensual
+          </button>
+          <button
+            className={`px-6 py-2 rounded-r-full font-semibold border transition-all duration-300 ${paymentType === 'one-time' ? 'bg-primary text-white border-primary' : 'bg-white text-cleat-dark border-slate-300'}`}
+            onClick={() => setPaymentType('one-time')}
+          >
+            Pago Único
+          </button>
+        </div>
 
-            <div className="mt-10">
-              <button
-                onClick={onOpenContactModal}
-                className={`w-full text-center inline-block rounded-full px-6 py-3 font-semibold transition-all duration-300 ${
-                  pricingPlans[activeIndex].isPopular
-                    ? 'bg-primary text-white shadow-md hover:bg-opacity-90'
-                    : 'bg-white border-2 border-cleat-dark text-cleat-dark hover:bg-cleat-dark hover:text-white'
+        {/* Mostrar planes según el tipo de pago */}
+        {paymentType === 'monthly' ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
+            {monthlyPlans.map((plan) => (
+              <div
+                key={plan.name}
+                className={`relative rounded-xl border p-8 flex flex-col h-full transition-all duration-300 ${
+                  plan.isPopular
+                    ? 'border-primary shadow-2xl scale-105 bg-primary/5'
+                    : 'border-slate-200 bg-white shadow-lg hover:shadow-xl hover:-translate-y-1'
                 }`}
               >
-                {pricingPlans[activeIndex].ctaText}
-              </button>
-            </div>
-          </div>
-          {/* Dots */}
-          <div className="flex justify-center gap-3 mt-8">
-              {pricingPlans.map((_, index) => (
+                {plan.isPopular && (
+                  <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2">
+                    <span className="rounded-full bg-primary px-4 py-1 text-sm font-semibold text-white">
+                      MÁS POPULAR
+                    </span>
+                  </div>
+                )}
+                <div className="flex-grow">
+                  <h3 className="text-2xl font-bold text-cleat-dark text-center">{plan.name}</h3>
+                  <div className="mt-4 text-center">
+                    <span className="text-4xl font-extrabold text-cleat-dark">{plan.price}</span>
+                    <span className="text-lg font-medium text-gray-500">{plan.billingCycle}</span>
+                  </div>
+                  <p className="mt-4 text-center text-gray-600 h-16">{plan.description}</p>
+                  <ul className="mt-8 space-y-4">
+                    {plan.features.map((feature, index) => (
+                      <li key={index} className="flex items-center gap-3">
+                        <CheckIcon className="h-5 w-5 flex-shrink-0 text-status-success" />
+                        <span className="text-slate-700">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="mt-10">
                   <button
-                      key={index}
-                      onClick={() => setActiveIndex(index)}
-                      aria-label={`Ver plan ${pricingPlans[index].name}`}
-                      className={`h-3 w-3 rounded-full transition-all duration-300 ${activeIndex === index ? 'bg-primary' : 'bg-slate-300'}`}
-                  />
-              ))}
+                    onClick={onOpenContactModal}
+                    className={`w-full text-center inline-block rounded-full px-6 py-3 font-semibold transition-all duration-300 ${
+                      plan.isPopular
+                        ? 'bg-primary text-white shadow-md hover:bg-opacity-90'
+                        : 'bg-white border-2 border-cleat-dark text-cleat-dark hover:bg-cleat-dark hover:text-white'
+                    }`}
+                  >
+                    {plan.ctaText}
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-
-        {/* Desktop Grid */}
-        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
-          {pricingPlans.map((plan) => (
-            <div
-              key={plan.name}
-              className={`relative rounded-xl border p-8 flex flex-col h-full transition-all duration-300 ${
-                plan.isPopular
-                  ? 'border-primary shadow-2xl scale-105 bg-primary/5'
-                  : 'border-slate-200 bg-white shadow-lg hover:shadow-xl hover:-translate-y-1'
-              }`}
-            >
-              {plan.isPopular && (
-                <div className="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2">
-                  <span className="rounded-full bg-primary px-4 py-1 text-sm font-semibold text-white">
-                    MÁS POPULAR
-                  </span>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-8 items-center justify-center">
+            {oneTimePlans.map((plan) => (
+              <div
+                key={plan.name}
+                className="relative rounded-xl border p-8 flex flex-col h-full transition-all duration-300 border-slate-200 bg-white shadow-lg max-w-md w-full mx-auto"
+              >
+                <div className="flex-grow">
+                  <h3 className="text-2xl font-bold text-cleat-dark text-center">{plan.name}</h3>
+                  <div className="mt-4 text-center">
+                    <span className="text-4xl font-extrabold text-cleat-dark">{plan.price}</span>
+                  </div>
+                  <p className="mt-4 text-center text-gray-600 h-16">{plan.description}</p>
+                  <ul className="mt-8 space-y-4">
+                    {plan.features.map((feature, index) => (
+                      <li key={index} className="flex items-center gap-3">
+                        <CheckIcon className="h-5 w-5 flex-shrink-0 text-status-success" />
+                        <span className="text-slate-700">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              )}
-              <div className="flex-grow">
-                <h3 className="text-2xl font-bold text-cleat-dark text-center">{plan.name}</h3>
-                <div className="mt-4 text-center">
-                  <span className="text-4xl font-extrabold text-cleat-dark">{plan.price}</span>
-                  <span className="text-lg font-medium text-gray-500">{plan.billingCycle}</span>
+                <div className="mt-10">
+                  <button
+                    onClick={onOpenContactModal}
+                    className="w-full text-center inline-block rounded-full px-6 py-3 font-semibold transition-all duration-300 bg-white border-2 border-cleat-dark text-cleat-dark hover:bg-cleat-dark hover:text-white"
+                  >
+                    {plan.ctaText}
+                  </button>
                 </div>
-                <p className="mt-4 text-center text-gray-600 h-16">{plan.description}</p>
-                
-                <ul className="mt-8 space-y-4">
-                  {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-center gap-3">
-                      <CheckIcon className="h-5 w-5 flex-shrink-0 text-status-success" />
-                      <span className="text-slate-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+                <p className="mt-6 text-xs text-gray-500 text-center">
+                  {plan.name.includes('Básico') ? '* Hosting y SSL incluidos por 1 año. Renovación opcional a partir del segundo año.' : '* Hosting y SSL incluidos por 2 años. Renovación opcional a partir del tercer año.'}
+                </p>
               </div>
-
-              <div className="mt-10">
-                <button
-                  onClick={onOpenContactModal}
-                  className={`w-full text-center inline-block rounded-full px-6 py-3 font-semibold transition-all duration-300 ${
-                    plan.isPopular
-                      ? 'bg-primary text-white shadow-md hover:bg-opacity-90'
-                      : 'bg-white border-2 border-cleat-dark text-cleat-dark hover:bg-cleat-dark hover:text-white'
-                  }`}
-                >
-                  {plan.ctaText}
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
         <p className="mt-8 text-center text-sm text-gray-500">
           ¿Necesitas más? <a href="#" className="font-semibold text-primary hover:underline">Contacta con nosotros</a> para planes empresariales.
         </p>

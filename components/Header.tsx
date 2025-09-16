@@ -11,8 +11,8 @@ const headerConfig = {
   sophisticatedHovers: true,
   advancedMenuAnimation: true,
   showWatchDemoButton: true,
-  showGetStartedButton: true,
-  showLoginButton: true,
+  showGetStartedButton: false,
+  showLoginButton: false,
 };
 
 // I18n Configuration

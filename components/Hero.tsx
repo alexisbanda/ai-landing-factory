@@ -18,7 +18,7 @@ const heroConfig = {
     // Tailwind classes for styling the image
     blur: 'blur-sm',       // e.g., 'blur-none', 'blur-sm', 'blur-md'
     brightness: 'brightness-50', // e.g., 'brightness-50', 'brightness-75'
-    opacity: 'opacity-80'    // e.g., 'opacity-30', 'opacity-50'
+    opacity: 'opacity-30'    // e.g., 'opacity-30', 'opacity-50'
   },
   
   showDescription: true,
